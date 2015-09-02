@@ -1,3 +1,3 @@
 # TechTrek_Idol_2016
 
-[![Alt text for your video](http://img.youtube.com/vi/6Wbi6dhEWdc/0.jpg)](https://www.youtube.com/watch?v=6Wbi6dhEWdc)
+[![Alt text for your video](http://img.youtube.com/vi/ZmT4ARHPJ5c/0.jpg)](https://www.youtube.com/watch?v=ZmT4ARHPJ5c)
