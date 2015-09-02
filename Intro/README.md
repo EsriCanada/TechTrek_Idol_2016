@@ -1,4 +1,4 @@
-# TechTrek_Idol_2016 
+# My Tech Trek Idol Team
 ## Example team submission
 Each team must minimally submit:
   1. A compelling ReadMe.md
