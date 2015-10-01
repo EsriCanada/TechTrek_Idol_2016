@@ -1,4 +1,4 @@
-# TechTrek_Idol_2016
+# TechTrek Idol 2016 Appathon
 
 Watch this:
 
