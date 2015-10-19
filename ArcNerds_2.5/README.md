@@ -1,4 +1,4 @@
-<h1>ArcNerd 2.5</h1>
+<h1>ArcNerds 2.5</h1>
 
 Members:</br>
 <li>Cameron McEvenue</li>
