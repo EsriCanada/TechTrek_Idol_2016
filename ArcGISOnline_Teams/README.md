@@ -1,4 +1,4 @@
-# ArcGIS Online teams
+# ArcGIS Online Teams
 ## For those teams who don't need GitHub
 
 
