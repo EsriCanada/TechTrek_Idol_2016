@@ -1,4 +1,4 @@
-# Team RP
+# Team SDROM
 
 * Simon Biickert
 * Dave Horwood
