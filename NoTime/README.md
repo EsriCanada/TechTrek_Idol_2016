@@ -3,7 +3,7 @@
 Members:
 
 * Bruce Dodson
-* *Jean Francois Desjardins?*
+* Jean Francois Desjardins
 
 Leading with our primary excuse, our team's name has a double meaning
 as our project will most likely involve some kind of temporal data
