@@ -4,6 +4,7 @@ Members:
 
 * Bruce Dodson
 * Jean Francois Desjardins
+* David Cross
 
 Leading with our primary excuse, our team's name has a double meaning
 as our project will most likely involve some kind of temporal data
