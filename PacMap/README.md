@@ -4,6 +4,6 @@
 
 Members:</br>
 <li>Nathan Enge</li>
-<li>Steve Ensing</li>
+<li>Euan Crawford</li>
 <li>Dan Mallett</li>
 
