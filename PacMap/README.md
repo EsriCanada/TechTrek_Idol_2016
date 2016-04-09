@@ -6,6 +6,7 @@ One lucky portal is chosen to receive the makeover of a lifetime which includes:
 
 You won't believe the "before" and "after"!
 
+<br>
 Team PacMap consists of:
 
 <li>Nathan Enge</li>
