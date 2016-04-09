@@ -2,7 +2,7 @@
 
 ![PortalMakeover.jpg](PortalMakeover.jpg)
 
-One lucky portal is chosen to receive the makeover of a lifetime which includes: a beautiful banner, backgrounds, luscious logos, tempting thumbnails and maybe even a magnificent vector map!
+One lucky portal is chosen to receive the makeover of a lifetime which includes: a beautiful banner, luscious logos, tempting thumbnails and maybe even a magnificent vector map!
 
 You won't believe the "before" and "after"!
 
