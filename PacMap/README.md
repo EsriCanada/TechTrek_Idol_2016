@@ -9,4 +9,4 @@ Members:</br>
 
 ![PortalMakeover.jpg](PortalMakeover.jpg)
 
-One portal is chosen to receive the makeover of a lifetime which includes: custom logos, thumbnails, embedded maps, maybe even a vector basemap!
+One portal is chosen to receive the makeover of a lifetime which includes: a beautiful banner, backgrounds, luscious logos, tempting thumbnails and maybe even a magnificent vector map!
