@@ -8,3 +8,5 @@ Members:</br>
 <li>Dan Mallett</li>
 
 ![PortalMakeover.jpg](PortalMakeover.jpg)
+
+One portal is chosen to receive the makeover of a lifetime which includes: custom logos, thumbnails, embedded maps, maybe even a vector basemap!
