@@ -7,6 +7,7 @@ One lucky portal is chosen to receive the makeover of a lifetime which includes:
 You won't believe the "before" and "after"!
 
 Resources:
+<br/>
 https://github.com/Esri/ago-admin-wiki/wiki/Home-Page-Tweaks
 <br/>
 https://blogs.esri.com/esri/arcgis/2013/03/14/home-page-banner-redux/
