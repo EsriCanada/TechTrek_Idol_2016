@@ -1,13 +1,12 @@
-# Team RP
+# The Gee Bees
 
-* Jon Ujkani
+* Jon Ujkani (in spirit)
 * Matt English
 * Mike Leahy
 
 Technology Mix:
 
-* ArcGIS Online configuration
-* Bootstrap web site
-* Survey 123
-* Custom mobile app using AppStudio
-* Server-side code for all the magic
+* Python backend
+* ArcGIS Online hosted web layers
+* Bootleaf front-end
+
