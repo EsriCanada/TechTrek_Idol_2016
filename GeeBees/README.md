@@ -1,6 +1,6 @@
 # The Gee Bees
 
-![alt text](http://cfile26.uf.tistory.com/image/2362C43A525BE4452DFD79 "Matt, Mike & John")
+![alt text](https://upload.wikimedia.org/wikipedia/en/3/36/Bee_Gees_Stayin_Alive.jpg "Matt, Mike & John")
 
 * Jon Ujkani (in spirit)
 * Matt English
