@@ -7,11 +7,14 @@ The script required the library Pyvoronoi to be installed.
     https://github.com/Voxel8/pyvoronoi
 """
 
+
 from __future__ import division
 import os,sys, traceback, math
 import arcpy
 import pyvoronoi
 
+#arcpy.BoostVoronoi(r'C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS', r'C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2', r'C:\Test\NRN\NRN.gdb\FeatureDataset', 'VORONOYING_POINTS', 'VORONOYING_LINES', 'VORONOYING_POLYGONS'
+#"C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS" "C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2" "C:\Test\NRN\NRN.gdb\FeatureDataset" "VORONOYING_POINTS" "VORONOYING_LINES" "VORONOYING_POLYGONS"
 
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
@@ -143,9 +146,14 @@ def main():
         ##################################################################################
         #HARD CODED PARAMETERS
         ##################################################################################
+        if arcpy.env.scratchWorkspace is None:
+            arcpy.env.scratchWorkspace = r'C:\Users\fancelin\Documents\ArcGIS\Default.gdb'
         factor = 100
-        inroads_split = "{0}{1}{2}".format(arcpy.env.scratchWorkspace, os.path.sep, "voronoying_lines_split")
-        inroads_split_line = "{0}{1}{2}".format(arcpy.env.scratchWorkspace, os.path.sep,"voronoying_lines_split_lines")
+        inroads_identifier = "ROADSEGID"
+        inroads_split_name = "voronoying_lines_split"
+        inroads_split_line_name = "voronoying_lines_split_lines"
+        inroads_split = "{0}{1}{2}".format(arcpy.env.scratchWorkspace, os.path.sep, inroads_split_name)
+        inroads_split_line = "{0}{1}{2}".format(arcpy.env.scratchWorkspace, os.path.sep, inroads_split_line_name)
         spatial_reference = arcpy.Describe(inlines).spatialReference
 
         ##################################################################################
@@ -184,14 +192,19 @@ def main():
         pv = pyvoronoi.Pyvoronoi(factor)
 
         arcpy.AddMessage("Add points to voronoi")
+        pointOIDs = []
         if inPointsBBox != None:
             extents.append(inPointsBBox)
             for point in arcpy.da.SearchCursor(inpoints, ['SHAPE@X', 'SHAPE@Y', 'OID@']):
+                pointOIDs.append(point[2])
                 pv.AddPoint([point[0], point[1]])
 
+				
         arcpy.AddMessage("Add lines to voronoi")
-        for road in arcpy.da.SearchCursor(inlines, ['SHAPE@', 'OID@', 'SHAPE@LENGTH']):
+        lineIds = []		
+        for road in arcpy.da.SearchCursor(inlines, ['SHAPE@', 'OID@', 'SHAPE@LENGTH', inroads_identifier]):
             if (road[2] > 0):
+                lineIds.append(road[3])
                 pv.AddSegment(
                     [
                         [
@@ -204,21 +217,25 @@ def main():
                         ]
                     ])
 
-        #arcpy.AddMessage("Computing bounding box outlines")
-        #finalBBox = mergeExtent(extents)
-        #bbox_line = [
-        #    arcpy.Array([arcpy.Point(finalBBox.XMin, finalBBox.YMin),
-        #                 arcpy.Point(finalBBox.XMin + finalBBox.width, finalBBox.YMin)]),
-        #    arcpy.Array([arcpy.Point(finalBBox.XMin, finalBBox.YMin),
-        #                 arcpy.Point(finalBBox.XMin, finalBBox.YMin + + finalBBox.height)]),
-        #    arcpy.Array([arcpy.Point(finalBBox.XMax, finalBBox.YMax),
-        #                 arcpy.Point(finalBBox.XMax - finalBBox.width, finalBBox.YMax)]),
-        #    arcpy.Array([arcpy.Point(finalBBox.XMax, finalBBox.YMax),
-        #                 arcpy.Point(finalBBox.XMax, finalBBox.YMax - finalBBox.height)]),
-        #]
+        arcpy.AddMessage("Computing bounding box outlines")
+        finalBBox = mergeExtent(extents)
 
-        #for pointArray in bbox_line:
-            #Check if the feature already exist
+		
+        bbox_line = [
+            [arcpy.Point(finalBBox.XMin, finalBBox.YMin),
+                         arcpy.Point(finalBBox.XMax, finalBBox.YMin)],
+            [arcpy.Point(finalBBox.XMin, finalBBox.YMin),
+                         arcpy.Point(finalBBox.XMin, finalBBox.YMax)],
+            [arcpy.Point(finalBBox.XMax, finalBBox.YMax),
+                         arcpy.Point(finalBBox.XMin, finalBBox.YMax)],
+            [arcpy.Point(finalBBox.XMax, finalBBox.YMax),
+                         arcpy.Point(finalBBox.XMax, finalBBox.YMin)],
+        ]
+        arcpy.AddMessage("Bounding Box Info: {0},{1} - {2},{3}".format(finalBBox.XMin,finalBBox.YMin,finalBBox.XMax,finalBBox.YMax))
+        for pointArray in bbox_line:
+            #arcpy.AddMessage("{0},{1} - {2},{3}".format(pointArray[0].X,pointArray[0].Y,pointArray[1].X,pointArray[1].Y))
+            pv.AddSegment([[pointArray[0].X,pointArray[0].Y], [pointArray[1].X,pointArray[1].Y]])
+		
 
         arcpy.AddMessage("Construct voronoi")
         pv.Construct()
@@ -248,8 +265,8 @@ def main():
                 cell = cells[cIndex]
                 if cell.is_open == False:
                     if (cIndex % 5000 == 0 and cIndex > 0):
-                        print "Cell Index: {0}".format(cIndex)
-
+                        arcpy.AddMessage("Cell Index: {0}".format(cIndex))
+						
                     for i in range(len(cell.edges)):
                         e = edges[cell.edges[i]]
                         startVertex = vertices[e.start]
@@ -269,13 +286,13 @@ def main():
                                         array.append(arcpy.Point(p[0], p[1]))
                                 except:
                                     arcpy.AddMessage(
-                                        "Issue at: {5}. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
+                                        "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
                                                                                    startVertex.Y, endVertex.X,
                                                                                    endVertex.Y, i))
                                     array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
 
                             polyline = arcpy.Polyline(array)
-                            cursor.insertRow((cIndex,e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, polyline))
+                            cursor.insertRow((cell.edges[i],e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, polyline))
 
         arcpy.AddMessage("Construct output cells feature class")
         if len(outpolygons) > 0:
@@ -285,7 +302,9 @@ def main():
             arcpy.AddField_management(outpolygons, 'CONTAINS_SEGMENT', "SHORT")
             arcpy.AddField_management(outpolygons, 'SITE', "LONG")
             arcpy.AddField_management(outpolygons, 'SOURCE_CATEGORY', "SHORT")
-            fields = ['CELL_ID', 'CONTAINS_POINT', 'CONTAINS_SEGMENT', 'SHAPE@', 'SITE', 'SOURCE_CATEGORY']
+            arcpy.AddField_management(outpolygons, 'INPUT_TYPE', "TEXT")
+            arcpy.AddField_management(outpolygons, 'INPUT_ID', "LONG")
+            fields = ['CELL_ID', 'CONTAINS_POINT', 'CONTAINS_SEGMENT', 'SHAPE@', 'SITE', 'SOURCE_CATEGORY', 'INPUT_TYPE', 'INPUT_ID']
             cursor = arcpy.da.InsertCursor(outpolygons, fields)
             for cIndex in range(len(cells)):
                 cell = cells[cIndex]
@@ -298,10 +317,17 @@ def main():
                             vertices[vIndex].X,
                             vertices[vIndex].Y
                         ))
-
+                    input_type = None
+                    input_id = None
+                    if cell.site >= len(pointOIDs):
+                        input_type = "LINE"
+                        input_id = lineIds[cell.site - len(pointOIDs)]
+                    else:
+                        input_type = "POINT"
+                        input_id = pointOIDs[cell.site]
                     polygon = arcpy.Polygon(pointArray)
                     cursor.insertRow((cell.cell_identifier, cell.contains_point, cell.contains_segment, polygon, cell.site,
-                                      cell.source_category))
+                                      cell.source_category, input_type, input_id))
             del cursor
 
     except Exception:
