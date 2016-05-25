@@ -19,6 +19,14 @@ import pyvoronoi
 def distance(p0, p1):
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
 
+
+def delFCByPath(FC):
+    """attempts to delete a specified feature class"""
+    try:
+        arcpy.Delete_management(FC)
+    except:
+        pass
+
 def mergeExtent(extents):
     """
     Read through a set of extent an return the extent containing them all.
@@ -141,6 +149,7 @@ def main():
         outpoints = arcpy.GetParameterAsText(3)
         outsegments = arcpy.GetParameterAsText(4)
         outpolygons = arcpy.GetParameterAsText(5)
+        inroads_identifier = arcpy.GetParameterAsText(6)
         arcpy.env.workspace = outWorkspace
 
         ##################################################################################
@@ -149,7 +158,6 @@ def main():
         if arcpy.env.scratchWorkspace is None:
             arcpy.env.scratchWorkspace = r'C:\Users\fancelin\Documents\ArcGIS\Default.gdb'
         factor = 100
-        inroads_identifier = "ROADSEGID"
         inroads_split_name = "voronoying_lines_split"
         inroads_split_line_name = "voronoying_lines_split_lines"
         inroads_split = "{0}{1}{2}".format(arcpy.env.scratchWorkspace, os.path.sep, inroads_split_name)
@@ -164,8 +172,12 @@ def main():
         validateLicense()
 
         #Validate lines are provided
-        if len(arcpy.GetParameterAsText(1)) == 0:
+        if len(outsegments) == 0:
             raise Exception("Input lines were not provided.")
+        
+        #Validate that a line identifier was provided
+        if len(inroads_identifier) == 0:
+            raise Exception("Input lines identifer was not provided.")
 
         extents = []
         #Validate input line feature class.
@@ -174,23 +186,23 @@ def main():
         #Validate input point feature class if required.
         inPointsBBox = validateInputPointFeatureClass(inpoints) if len(arcpy.GetParameterAsText(0)) > 0 else None
 
+        ##################################################################################
+        #REMOVE FEATURE CLASSES
+        ##################################################################################
+        for fc in [
+            inroads_split,
+            inroads_split_line,
+            "{0}{1}{2}".format(outWorkspace, os.path.sep, outpoints),
+            "{0}{1}{2}".format(outWorkspace,os.path.sep,outsegments),
+            "{0}{1}{2}".format(outWorkspace,os.path.sep,outpolygons)]:
+            delFCByPath(fc)
+
 
         ##################################################################################
-        #FORMAT INPUT. NEED TO MAKE SURE LINE ARE SPLIT AT VERTICES AND THAT THERE ARE NO OVERLAPS
+        #COMPUTING THE BOUNDING BOX
         ##################################################################################
-        arcpy.AddMessage("Format lines")
-        arcpy.AddMessage("Split lines at vertices")
-        arcpy.SplitLine_management(in_features=inlines, out_feature_class=inroads_split)
-        arcpy.AddMessage("Split lines at intersections")
-        arcpy.FeatureToLine_management(inroads_split, inroads_split_line, '#', 'ATTRIBUTES')
-
-
-        ##################################################################################
-        #SEND INPUT TO VORONOI AND CONSTRUCT THE GRAPH
-        ##################################################################################
-        #Instanciate pyvoronoi
+        # Instanciate pyvoronoi
         pv = pyvoronoi.Pyvoronoi(factor)
-
         arcpy.AddMessage("Add points to voronoi")
         pointOIDs = []
         if inPointsBBox != None:
@@ -199,10 +211,63 @@ def main():
                 pointOIDs.append(point[2])
                 pv.AddPoint([point[0], point[1]])
 
-				
+        arcpy.AddMessage("Computing bounding box outlines")
+        finalBBox = mergeExtent(extents)
+        finalBBoxExpended = arcpy.Extent(finalBBox.XMin -1, finalBBox.YMin - 1, finalBBox.XMax + 1, finalBBox.YMax + 1)
+        bbox_line = [
+            arcpy.Array([arcpy.Point(finalBBox.XMin, finalBBox.YMin),
+             arcpy.Point(finalBBox.XMax, finalBBox.YMin)]),
+                    arcpy.Array([arcpy.Point(finalBBox.XMin, finalBBox.YMin),
+             arcpy.Point(finalBBox.XMin, finalBBox.YMax)]),
+        arcpy.Array([arcpy.Point(finalBBox.XMax, finalBBox.YMax),
+             arcpy.Point(finalBBox.XMin, finalBBox.YMax)]),
+        arcpy.Array([arcpy.Point(finalBBox.XMax, finalBBox.YMax),
+             arcpy.Point(finalBBox.XMax, finalBBox.YMin)]),
+
+            arcpy.Array([arcpy.Point(finalBBoxExpended.XMin, finalBBoxExpended.YMin),
+             arcpy.Point(finalBBoxExpended.XMax, finalBBoxExpended.YMin)]),
+                    arcpy.Array([arcpy.Point(finalBBoxExpended.XMin, finalBBoxExpended.YMin),
+             arcpy.Point(finalBBoxExpended.XMin, finalBBoxExpended.YMax)]),
+        arcpy.Array([arcpy.Point(finalBBoxExpended.XMax, finalBBoxExpended.YMax),
+             arcpy.Point(finalBBoxExpended.XMin, finalBBoxExpended.YMax)]),
+        arcpy.Array([arcpy.Point(finalBBoxExpended.XMax, finalBBoxExpended.YMax),
+             arcpy.Point(finalBBoxExpended.XMax, finalBBoxExpended.YMin)])
+        ]
+        arcpy.AddMessage(
+            "Bounding Box Info: {0},{1} | {2},{3}".format(finalBBox.XMin, finalBBox.YMin, finalBBox.XMax,
+                                                          finalBBox.YMax))
+
+
+        ##################################################################################
+        #FORMAT INPUT. NEED TO MAKE SURE LINE ARE SPLIT AT VERTICES AND THAT THERE ARE NO OVERLAPS
+        ##################################################################################
+        arcpy.AddMessage("Format lines")
+        arcpy.AddMessage("Split lines at vertices")
+        arcpy.SplitLine_management(in_features=inlines, out_feature_class=inroads_split)
+
+        arcpy.AddMessage("Add bounding box")
+        with arcpy.da.InsertCursor(inroads_split, ['SHAPE@', inroads_identifier]) as op:
+            for pointArray in bbox_line:
+                arcpy.AddMessage(
+                    "{0},{1} - {2},{3}".format(
+                        pointArray[0].X,
+                        pointArray[0].Y,
+                        pointArray[1].X,
+                        pointArray[1].Y)
+                )
+                op.insertRow([arcpy.Polyline(pointArray), None])
+        del op
+
+        arcpy.AddMessage("Split lines at intersections")
+        arcpy.FeatureToLine_management(inroads_split, inroads_split_line, '#', 'ATTRIBUTES')
+
+
+        ##################################################################################
+        #SEND LINE INPUT TO VORONOI AND CONSTRUCT THE GRAPH
+        ##################################################################################
         arcpy.AddMessage("Add lines to voronoi")
         lineIds = []		
-        for road in arcpy.da.SearchCursor(inlines, ['SHAPE@', 'OID@', 'SHAPE@LENGTH', inroads_identifier]):
+        for road in arcpy.da.SearchCursor(inroads_split_line, ['SHAPE@', 'OID@', 'SHAPE@LENGTH', inroads_identifier]):
             if (road[2] > 0):
                 lineIds.append(road[3])
                 pv.AddSegment(
@@ -217,24 +282,7 @@ def main():
                         ]
                     ])
 
-        arcpy.AddMessage("Computing bounding box outlines")
-        finalBBox = mergeExtent(extents)
 
-		
-        bbox_line = [
-            [arcpy.Point(finalBBox.XMin, finalBBox.YMin),
-                         arcpy.Point(finalBBox.XMax, finalBBox.YMin)],
-            [arcpy.Point(finalBBox.XMin, finalBBox.YMin),
-                         arcpy.Point(finalBBox.XMin, finalBBox.YMax)],
-            [arcpy.Point(finalBBox.XMax, finalBBox.YMax),
-                         arcpy.Point(finalBBox.XMin, finalBBox.YMax)],
-            [arcpy.Point(finalBBox.XMax, finalBBox.YMax),
-                         arcpy.Point(finalBBox.XMax, finalBBox.YMin)],
-        ]
-        arcpy.AddMessage("Bounding Box Info: {0},{1} - {2},{3}".format(finalBBox.XMin,finalBBox.YMin,finalBBox.XMax,finalBBox.YMax))
-        for pointArray in bbox_line:
-            #arcpy.AddMessage("{0},{1} - {2},{3}".format(pointArray[0].X,pointArray[0].Y,pointArray[1].X,pointArray[1].Y))
-            pv.AddSegment([[pointArray[0].X,pointArray[0].Y], [pointArray[1].X,pointArray[1].Y]])
 		
 
         arcpy.AddMessage("Construct voronoi")
@@ -289,6 +337,7 @@ def main():
                                         "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
                                                                                    startVertex.Y, endVertex.X,
                                                                                    endVertex.Y, i))
+                                    #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
                                     array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
 
                             polyline = arcpy.Polyline(array)
@@ -310,7 +359,7 @@ def main():
                 cell = cells[cIndex]
                 if cell.is_open == False:
                     if (cIndex % 5000 == 0 and cIndex > 0):
-                        print "Cell Index: {0}".format(cIndex)
+                        arcpy.AddMessage("Cell Index: {0}".format(cIndex))
                     pointArray = arcpy.Array()
                     for vIndex in cell.vertices:
                         pointArray.add(arcpy.Point(
