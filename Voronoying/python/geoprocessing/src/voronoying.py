@@ -174,7 +174,7 @@ def main():
         #Validate lines are provided
         if len(outsegments) == 0:
             raise Exception("Input lines were not provided.")
-        
+
         #Validate that a line identifier was provided
         if len(inroads_identifier) == 0:
             raise Exception("Input lines identifer was not provided.")
