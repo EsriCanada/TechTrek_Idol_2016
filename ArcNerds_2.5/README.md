@@ -33,9 +33,8 @@ To visualize the data, we used the <a href="https://developers.arcgis.com/web-ap
 
 Once complete, we put together some steps on how we did it.
 
-<h5>Sources</h5>
+<h5>References</h5>
 <b><a href="https://www.raspberrypi.org/blog/school-weather-station-project/">A Raspberry Pi Weather Station for Schools</a><br/></b>
-A project prepared by the Raspberry Pi foundation in 2015 on a grant from <a href="http://www.oracle.com/index.html">Oracle</a> to build and donate 1000 weather station kits to schools around the world. <br />
 <a href="https://www.raspberrypi.org/blog/school-weather-station-project/">https://www.raspberrypi.org/blog/school-weather-station-project</a>
 
 <b><a href="http://www.weewx.com/">WeeWx</a></b><br/>
