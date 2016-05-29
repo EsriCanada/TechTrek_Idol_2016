@@ -1,12 +1,45 @@
-<h1>ArcNerds 2.5</h1>
+<h1>Project ArcNerds</h1>
+<i>Project Submission for Tech Trek Idol 2016</i>
+<h2>Adding a little Geography to STEaM based learning!</h2>
 
-Members:</br>
-<li>Cameron McEvenue</li>
-<li>Rahul Chandra</li>
-<li>John Osborne</li>
+<i>Team Members: Cameron McEvenue, Rahul Chandra and John Osborne</i>
 
-Technology Mix:
-<li>ArcGIS Web App Builder Widgets</li>
-<li>ArcGIS Online Feature Services</li>
-<li>Custom Python Scripts to keep the data fresh</li>
-<li>Raspberry Pi with the right Sensors to collect some data</li>
+<h4>STEaM based learning with a dash of Geography</h4>
+
+Science, Technology, Engineering, Art and Math (STEaM) focused projects bring real world problem solving into the classroom.  When a student is directly impacted by the issue, the more likely they will remain engaged in the problem solving process.     
+
+Adding Geography to the recipe presents a multitude of issues on local, national and global scales that impact everyone.  The observable world around us contains a wealth of accessible information ready to be analyzed.
+
+As Geography professionals, it is important for us to provide the resources our school's need to be successful.
+
+<h4>What is Project ArcNerds?</h4>
+
+The goal of Project ArcNerds is to provide tutorials and tools for  STEaM based projects that focus on Geography.  These resources can be used to recreate the project in the classroom.  Projects will include the following component's:
+
+<ul>
+<li>Data Collection and Storage</li>
+<li>Visualization</li>
+<li>Analysis</li>
+<li>Programming</li>
+</ul>
+
+<h4>How's the Weather?</h4>
+
+For our first project we decided to periodically upload data from a home-use Weather Station to an ArcGIS Online feature service.  
+
+  Using a small, affordable micro-computer called a <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, freely available open source weather software called <a href="http://www.weewx.com/">WeeWx</a> and some python, we configured a weather station to periodically update an <a href="http://services.arcgis.com/EgePHk52tsFjmhbJ/arcgis/rest/services/weather/FeatureServer/">ArcGIS Online feature service</a>.
+
+To visualize the data, we used the <a href="https://developers.arcgis.com/web-appbuilder/">ArcGIS Web Application Builder</a> to code a few widgets in JavaScript and published the site.
+
+Once complete, we put together some steps on how we did it.
+
+<h5>Sources</h5>
+<b><a href="https://www.raspberrypi.org/blog/school-weather-station-project/">A Raspberry Pi Weather Station for Schools</a><br/></b>
+A project prepared by the Raspberry Pi foundation in 2015 on a grant from <a href="http://www.oracle.com/index.html">Oracle</a> to build and donate 1000 weather station kits to schools around the world. <br />
+<a href="https://www.raspberrypi.org/blog/school-weather-station-project/">https://www.raspberrypi.org/blog/school-weather-station-project</a>
+
+<b><a href="http://www.weewx.com/">WeeWx</a></b><br/>
+Open source, extendable, python-based software for Linux that interacts with weather stations. <br />
+<a href="http://www.weewx.com/">http://www.weewx.com</a>
+
+<i>Raspberry Pi is a trademark of the Raspberry Pi Foundation</i>      
