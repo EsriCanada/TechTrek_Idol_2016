@@ -28,7 +28,7 @@ C:\Users\\\<local user>\Documents\WebAppBuilderForArcGIS\\**client\stemapp\widge
 Follow the steps on Esri's Developer site to [create a New App](https://developers.arcgis.com/web-appbuilder/guide/build-your-first-app.htm) and [Adding a Widget](https://developers.arcgis.com/web-appbuilder/guide/widgets-tab.htm) to an application. You should see the option for the icon for Weather Station Widget in the widget list.
 
 <Add screenshot of Widget in Widget List>
-![Photo of Widget List](http://placehold.it/350x150)
+![Photo of Widget List](./README_img/WidgetIcon.png?raw=true)
 
 ###4 - Modify the Configuration
 
