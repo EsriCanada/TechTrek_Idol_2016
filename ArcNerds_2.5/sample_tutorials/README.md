@@ -103,5 +103,3 @@ This code is doing the following:
 
 
 Between the two code sections listed above, you can add logic to your script to read data from your device and upload it to ArcGIS Online using he addFeatures request.
-
-<i>Raspberry Pi is a trademark of the Raspberry Pi Foundation</i>

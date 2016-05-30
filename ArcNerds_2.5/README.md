@@ -41,4 +41,4 @@ Once complete, we will put together some tutorials that can be used repeat this 
 Open source, extendable, python-based software for Linux that interacts with weather stations. <br />
 <a href="http://www.weewx.com/">http://www.weewx.com</a>
 
-<i>Raspberry Pi is a trademark of the Raspberry Pi Foundation</i>      
+ 
