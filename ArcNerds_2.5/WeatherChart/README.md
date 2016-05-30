@@ -3,7 +3,7 @@
 This is a custom ArcGIS Web App Builder (Developer Edition) widget. It is designed to work with a Weather Station feature service in an ArcGIS Online Web Map. The widget pulls and summarizes weather data from a table related to a Weather Station feature service. Below is a sample of the widgets' user interface. This widget was created internally as part of a project to educate students on using a microcomputer to pull weather data  from a weather station and push it to a RESTful service using python and a REST API. Check out the full scope of the project here:
 
 <Change project name, add URL in brackets>
-[Project Name Here]()
+[Project ArcNerds Weather Network](http://159.203.41.252/project-arcnerds/weather/)
 
 <Add screenshot of Widget in Action>
 ![Widget UI](./README_img/WidgetUI.PNG?raw=true)

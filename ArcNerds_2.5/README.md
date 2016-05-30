@@ -29,9 +29,12 @@ For our first project we decided to periodically upload data from a home-use Wea
 
   Using a small, affordable micro-computer called a <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, freely available open source weather software called <a href="http://www.weewx.com/">WeeWx</a> and some python, we configured a weather station to periodically update an <a href="http://services.arcgis.com/EgePHk52tsFjmhbJ/arcgis/rest/services/weather/FeatureServer/">ArcGIS Online feature service</a>.
 
-To visualize the data, we used the <a href="https://developers.arcgis.com/web-appbuilder/">ArcGIS Web Application Builder</a> to code a few widgets in JavaScript and published the site.
+To visualize the data, we used the <a href="https://developers.arcgis.com/web-appbuilder/">ArcGIS Web Application Builder</a> to code a few widgets in JavaScript and then created a website.  We currently have widgets to display up to date weather information as well as generate charts summarizing the data that has been collected for a specific station.
 
-Once complete, we will put together some tutorials that can be used repeat this project in the classroom.  For now, we've prepared a sample tutorial and uploaded it to our repository.  
+Here's a sample web application that uses our custom widgets:<br/>
+<a href="http://159.203.41.252/project-arcnerds/weather/">Project ArcNerds Weather Network</a><br/>
+
+Once complete, we will put together some tutorials that can be used to repeat this project in the classroom.  For now, we've prepared a sample tutorial and uploaded it to our repository.  
 
 <h5>References</h5>
 <b><a href="https://www.raspberrypi.org/blog/school-weather-station-project/">A Raspberry Pi Weather Station for Schools</a><br/></b>
@@ -40,5 +43,3 @@ Once complete, we will put together some tutorials that can be used repeat this 
 <b><a href="http://www.weewx.com/">WeeWx</a></b><br/>
 Open source, extendable, python-based software for Linux that interacts with weather stations. <br />
 <a href="http://www.weewx.com/">http://www.weewx.com</a>
-
- 
