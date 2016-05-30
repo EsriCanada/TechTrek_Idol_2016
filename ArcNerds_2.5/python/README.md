@@ -58,5 +58,3 @@ WeeWX Customizing a service<br />
 
 Implementing App Login<br />
 <a href="https://developers.arcgis.com/authentication/accessing-arcgis-online-services/">https://developers.arcgis.com/authentication/accessing-arcgis-online-services/</a>
-
-<i>Raspberry Pi is a trademark of the Raspberry Pi Foundation</i>  
