@@ -25,7 +25,7 @@ The goal of Project ArcNerds is to provide tutorials and tools for  STEaM based 
 
 <h4>How's the Weather?</h4>
 
-For our first project we decided to periodically upload data from a home-use Weather Station to an ArcGIS Online feature service.  Many Canadian school boards already have ArcGIS Online Subscriptions already available to them.
+For our first project we decided to periodically upload data from a home-use Weather Station to an ArcGIS Online feature service.  Many Canadian school boards have ArcGIS Online Subscriptions already available to them.
 
   Using a small, affordable micro-computer called a <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, freely available open source weather software called <a href="http://www.weewx.com/">WeeWx</a> and some python, we configured a weather station to periodically update an <a href="http://services.arcgis.com/EgePHk52tsFjmhbJ/arcgis/rest/services/weather/FeatureServer/">ArcGIS Online feature service</a>.
 
