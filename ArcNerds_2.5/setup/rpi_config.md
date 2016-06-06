@@ -1,14 +1,14 @@
 #Raspberry Pi Configuration
 
-This section outlines the steps used to configure and secure the Raspberry Pi for this project.
+This section outlines the steps used to configure the Raspberry Pi for this project.
 
 ##Step 1:  Download Raspbian and prepare SD card
 
-WeeWx is supported on several Linux platforms.  For this project, Raspbian Jessie Lite release was used.  Raspbian is currently available on the Raspberry Pi downloads page:
+WeeWx is supported on several Linux platforms.  For this project, the latest Raspbian Jessie Lite release was used.  Raspbian is currently available on the Raspberry Pi downloads page:
 
 <a href="https://www.raspberrypi.org/downloads/raspbian/">https://www.raspberrypi.org/downloads/raspbian/</a>
 
-The Raspberry Pi documentation provides additional steps for writing the downloaded image file to an SD Card.  The SD card should have a minimum of 8GB.  The following Raspberry Pi documentation contains provides steps for installing the image using a Linux, Windows or Mac OS client:
+The Raspberry Pi documentation provides additional steps for writing the downloaded image file to an SD Card.  The SD card should have a minimum of 8GB.  The following Raspberry Pi documentation provides steps for installing the image using a Linux, Windows or Mac OS client:
 
 <a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md">https://www.raspberrypi.org/documentation/installation/installing-images/README.md</a>
 
