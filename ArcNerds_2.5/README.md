@@ -38,6 +38,11 @@ Once complete, we will put together some tutorials that can be used to repeat th
 
 <h5>References</h5>
 
+<b><a href="https://www.raspberrypi.org/">Raspberry Pi Foundation</a></b><br/>
+An affordable credit card sized micro-computer built to encourage learning in computer science.
+ <br />
+<a href="https://www.raspberrypi.org">https://www.raspberrypi.org</a>
+
 <b><a href="http://www.weewx.com/">WeeWx</a></b><br/>
 Open source, extendable, python-based software for Linux that interacts with weather stations. <br />
 <a href="http://www.weewx.com/">http://www.weewx.com</a>
