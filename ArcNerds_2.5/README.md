@@ -14,13 +14,13 @@ As Geography professionals, it is important for us to provide the resources our 
 
 <h4>What is Project ArcNerds?</h4>
 
-The goal of Project ArcNerds is to provide tutorials and tools for  STEaM based projects that focus on Geography.  These resources can be used to recreate the project in the classroom.  Projects will include the following component's:
+The goal of Project ArcNerds is to provide tutorials and tools for STEaM based projects that focus on Geography.  These resources can be used to recreate the project in the classroom.  Projects will include the following component's:
 
 <ul>
 <li>Data Collection and Storage</li>
 <li>Visualization</li>
 <li>Analysis</li>
-<li>Programming</li>
+<li>Application development</li>
 </ul>
 
 <h4>How's the Weather?</h4>
@@ -37,8 +37,6 @@ Here's a sample web application that uses our custom widgets:<br/>
 Once complete, we will put together some tutorials that can be used to repeat this project in the classroom.  For now, we've prepared a sample tutorial and uploaded it to our repository.  
 
 <h5>References</h5>
-<b><a href="https://www.raspberrypi.org/blog/school-weather-station-project/">A Raspberry Pi Weather Station for Schools</a><br/></b>
-<a href="https://www.raspberrypi.org/blog/school-weather-station-project/">https://www.raspberrypi.org/blog/school-weather-station-project</a>
 
 <b><a href="http://www.weewx.com/">WeeWx</a></b><br/>
 Open source, extendable, python-based software for Linux that interacts with weather stations. <br />
