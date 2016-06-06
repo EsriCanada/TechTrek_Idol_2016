@@ -48,6 +48,14 @@ station_id:  the registered station ID for the weather station
 The following tutorial provides details on generating a client_id and client_secret:
 <a href="../sample_tutorials/README.md">Using python to upload data to ArcGIS Online</a>.
 
+Finally, you will also need configure WeeWx to load the service.  Add a reference for user.agolUpload.AgolUpload to the list of report_services in the [Engine][[Services]] section of the weewx.conf file:
+
+<pre>
+[Engine]
+    [[Services]]
+        report_services = weewx.engine.StdPrint, weewx.engine.StdReport, user.agolUpload.AgolUpload
+</pre>
+
 ###Resources:
 
 WeeWX Customization guide<br />

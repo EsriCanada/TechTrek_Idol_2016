@@ -42,6 +42,8 @@ class AgolUpload(StdService):
             self.client_id       = config_dict['AgolUpload']['client_id']
             self.client_secret   = config_dict['AgolUpload']['client_secret']
             self.station_id = int(config_dict['AgolUpload'].get('station_id', 1))
+            self.username       = config_dict['AgolUpload'].get('username', None)
+            self.password   = config_dict['AgolUpload'].get('password', None)
             syslog.syslog(syslog.LOG_INFO, "AGOL test: {0}, {1}, {2}, {3}]".format(self.service,
                                                                                    self.client_id,
                                                                                    self.client_secret,
@@ -51,22 +53,28 @@ class AgolUpload(StdService):
             self.bind(weewx.NEW_ARCHIVE_RECORD, self.newArchiveRecord)    # NOTE 1
 
         except ValueError as e:
-            syslog.syslog(syslog.LOG_INFO, "alarm: No alarm set. %s" % e)
+            syslog.syslog(syslog.LOG_INFO, "Failed to initialize service. %s" % e)
 
     def newArchiveRecord(self, event):
         """Gets called on a new archive record event."""
+        syslog.syslog(syslog.LOG_INFO, "Record. %s" % event.record)
 
         try:
-            token = self.get_agol_token(self.client_id, self.client_secret)
+            token = ""
+            if self.username:
+                token = self.get_agol_token_user(self.username, self.password)
+            else:
+                token = self.get_agol_token(self.client_id, self.client_secret)
             feature_json = self.format_attributes(event.record)
             add_features_params = {'f': 'json', 'token': token, 'features': feature_json}
             data = requests.post(self.service, params=add_features_params)
+            syslog.syslog(syslog.LOG_INFO, "result: %s" % data.text)
         except KeyError as key:
-            syslog.syslog(syslog.LOG_INFO, "Lookup error")
+            syslog.syslog(syslog.LOG_INFO, "Lookup error: %s" % key)
         except ConnectionError as conn_error:
-            syslog.syslog(syslog.LOG_INFO, "Error occured connecting to service")
+            syslog.syslog(syslog.LOG_INFO, "Error occured connecting to service: %s" % conn_error)
         except Exception as e:
-            syslog.syslog(syslog.LOG_INFO, "General error occured")
+            syslog.syslog(syslog.LOG_INFO, "General error occured: %s" % e)
 
     def format_attributes(self, rec):
 
@@ -104,7 +112,6 @@ class AgolUpload(StdService):
 
         return atts
 
-
     def get_attribute(self, att_name, att_value, is_string):
         if att_value is None:
             return '"{0}": null'.format(att_name)
@@ -114,8 +121,21 @@ class AgolUpload(StdService):
 
         return '"{0}": {1}'.format(att_name, att_value)
 
+    def get_agol_token_user(self, user, password):
+        syslog.syslog(syslog.LOG_INFO, "Get token using username and password.")
+        token = requests.post('https://www.arcgis.com/sharing/rest/generateToken', params={
+            'f': 'json',
+            'username': user,
+            'password': password,
+            'expiration': '1440'
+        })
+
+        syslog.syslog(syslog.LOG_INFO, "%s" % token.json())
+        access_token = token.json()['token']
+        return access_token
 
     def get_agol_token(self, client_id, client_secret):
+        syslog.syslog(syslog.LOG_INFO, "Get token using oauth2.")
         token = requests.post('https://www.arcgis.com/sharing/rest/oauth2/token/', params={
             'f': 'json',
             'client_id': client_id,
