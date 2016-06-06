@@ -39,11 +39,11 @@ Add the following lines to the end of the /etc/weewx/weewx.conf file:
 
 where:
 
-<b>service_url</b>: the URL to the ArcGIS Online Feature Service maintaining weather station data.
-<b>layer_id:</b> the layer id of the Feature Layer that maintains the weather station data
-<b>client_id:</b> the registered client ID for the Application
-<b>client_secret:</b>  the registered credentials for token generation
-<b>station_id:</b>  the registered station ID for the weather station
+<b>service_url</b>: the URL to the ArcGIS Online Feature Service maintaining weather station data.<br/>
+<b>layer_id:</b> the layer id of the Feature Layer that maintains the weather station data. <br/>
+<b>client_id:</b> the registered client ID for the Application. <br/>
+<b>client_secret:</b>  the registered credentials for token generation. <br/>
+<b>station_id:</b>  the registered station ID for the weather station. <br/>
 
 The following tutorial provides details on generating a client_id and client_secret:
 <a href="../sample_tutorials/README.md">Using python to upload data to ArcGIS Online</a>.
