@@ -916,18 +916,20 @@ namespace GPVoronoi
 
         double lineAngle_rads(IPoint start, IPoint end)
         {
-            double dx = end.X - start.X;
-            double dy = end.Y - start.Y;
+            //double dx = end.X - start.X;
+            //double dy = end.Y - start.Y;
 
-            double rotation = Math.Atan(dy / dx);
+            //double rotation = Math.Atan(dy / dx);
 
-            while (rotation >= Math.PI)
-                rotation -= Math.PI;
+            //while (rotation >= Math.PI)
+            //    rotation -= Math.PI;
 
-            while (rotation <= (-1 * Math.PI))
-                rotation += Math.PI;
+            //while (rotation <= (-1 * Math.PI))
+            //    rotation += Math.PI;
 
-            return Math.Round(rotation, 6);
+            //return Math.Round(rotation, 6);
+
+            return Math.Round(Math.Atan2(end.Y - start.Y, end.X - start.X), 6);
         }
 
         // This is the function name object for the Geoprocessing Function Tool. 
