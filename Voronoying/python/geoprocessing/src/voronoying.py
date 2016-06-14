@@ -16,10 +16,15 @@ import pyvoronoi
 #arcpy.BoostVoronoi(r'C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS', r'C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2', r'C:\Test\NRN\NRN.gdb\FeatureDataset', 'VORONOYING_POINTS', 'VORONOYING_LINES', 'VORONOYING_POLYGONS'
 #"C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS" "C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2" "C:\Test\NRN\NRN.gdb\FeatureDataset" "VORONOYING_POINTS" "VORONOYING_LINES" "VORONOYING_POLYGONS"
 
-def distance(p0, p1):
-    return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
-
-
+def Distance(point1, point2):
+    """
+	pute the euclidean distance between two points
+        :param point1:  an array of two double precision numbers representing the first point
+        :param point2: an array of two double precision numbers representing the starting point of the line on the other side of the curve
+        :return: the distance, as a float8 number.			
+    """
+    return math.sqrt(math.pow(point2[0] - point1[0], 2) + math.pow(point2[1] - point1[1], 2))
+	
 def delFCByPath(FC):
     """attempts to delete a specified feature class"""
     try:
@@ -306,8 +311,12 @@ def main():
             arcpy.AddField_management(outsegments, 'Site2', "LONG")
             arcpy.AddField_management(outsegments, 'Cell', "LONG")
             arcpy.AddField_management(outsegments, 'Twin', "LONG")
+            arcpy.AddField_management(outsegments, 'FROM_X', "DOUBLE")
+            arcpy.AddField_management(outsegments, 'FROM_Y', "DOUBLE")
+            arcpy.AddField_management(outsegments, 'TO_X', "DOUBLE")
+            arcpy.AddField_management(outsegments, 'TO_Y', "DOUBLE")
 
-            fields = ['EdgeIndex', 'Start', 'End', 'IsLinear', 'IsPrimary','Site1','Site2','Cell','Twin','SHAPE@']
+            fields = ['EdgeIndex', 'Start', 'End', 'IsLinear', 'IsPrimary','Site1','Site2','Cell','Twin', 'FROM_X', 'FROM_Y', 'TO_X', 'TO_Y','SHAPE@']
             cursor = arcpy.da.InsertCursor(outsegments, fields)
             for cIndex in range(len(cells)):
                 cell = cells[cIndex]
@@ -320,28 +329,28 @@ def main():
                         startVertex = vertices[e.start]
                         endVertex = vertices[e.end]
 
-                        max_distance  = distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 10
+                        max_distance  = Distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 20
                         array = arcpy.Array()
                         if startVertex != -1 and endVertex != -1:
-                            if(e.is_linear == True):
-                                array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y),arcpy.Point(endVertex.X, endVertex.Y)])
-
-                            else:
-                                try:
-                                    points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance)
-                                    for p in points:
-                                        #print "{0},{1}".format(p[0], p[1])
-                                        array.append(arcpy.Point(p[0], p[1]))
-                                except:
-                                    arcpy.AddMessage(
-                                        "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
-                                                                                   startVertex.Y, endVertex.X,
-                                                                                   endVertex.Y, i))
-                                    #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
-                                    array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
-
+                            #if(e.is_linear == True):
+                            #    array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y),arcpy.Point(endVertex.X, endVertex.Y)])
+                            #
+                            #else:
+                            #    try:
+                            #        points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance)
+                            #        for p in points:
+                            #            #print "{0},{1}".format(p[0], p[1])
+                            #            array.append(arcpy.Point(p[0], p[1]))
+                            #    except:
+                            #        arcpy.AddMessage(
+                            #            "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
+                            #                                                       startVertex.Y, endVertex.X,
+                            #                                                       endVertex.Y, i))
+                            #        #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                            #        array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                            array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
                             polyline = arcpy.Polyline(array)
-                            cursor.insertRow((cell.edges[i],e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, polyline))
+                            cursor.insertRow((cell.edges[i],e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, startVertex.X, startVertex.Y, endVertex.X, endVertex.Y, polyline))
 
         arcpy.AddMessage("Construct output cells feature class")
         if len(outpolygons) > 0:
