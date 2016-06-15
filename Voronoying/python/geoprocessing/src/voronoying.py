@@ -299,6 +299,17 @@ def main():
         ##################################################################################
         #CREATE THE OUTPUT FEATURE CLASSES
         ##################################################################################
+        arcpy.AddMessage("Construct output point feature class")
+        if len(outpoints) > 0:
+            arcpy.CreateFeatureclass_management(outWorkspace, outpoints, 'POINT', spatial_reference=spatial_reference)		
+            arcpy.AddField_management(outpoints, 'IDENTIFIER', "LONG")		
+            fields = ['IDENTIFIER', 'SHAPE@X', 'SHAPE@Y']
+            cursor = arcpy.da.InsertCursor(outpoints, fields)
+            for vIndex in range (len(vertices)):
+                v = vertices[vIndex]
+                cursor.insertRow([vIndex, v.X, v.Y])
+		
+		
         arcpy.AddMessage("Construct output segment feature class")
         if len(outsegments) > 0:
             arcpy.CreateFeatureclass_management(outWorkspace, outsegments, 'POLYLINE', spatial_reference=spatial_reference)
@@ -332,23 +343,23 @@ def main():
                         max_distance  = Distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 20
                         array = arcpy.Array()
                         if startVertex != -1 and endVertex != -1:
-                            #if(e.is_linear == True):
-                            #    array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y),arcpy.Point(endVertex.X, endVertex.Y)])
-                            #
-                            #else:
-                            #    try:
-                            #        points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance)
-                            #        for p in points:
-                            #            #print "{0},{1}".format(p[0], p[1])
-                            #            array.append(arcpy.Point(p[0], p[1]))
-                            #    except:
-                            #        arcpy.AddMessage(
-                            #            "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
-                            #                                                       startVertex.Y, endVertex.X,
-                            #                                                       endVertex.Y, i))
-                            #        #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
-                            #        array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
-                            array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                            if(e.is_linear == True):
+                                array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y),arcpy.Point(endVertex.X, endVertex.Y)])
+                            
+                            else:
+                                try:
+                                    points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance)
+                                    for p in points:
+                                        #print "{0},{1}".format(p[0], p[1])
+                                        array.append(arcpy.Point(p[0], p[1]))
+                                except:
+                                    arcpy.AddMessage(
+                                        "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
+                                                                                   startVertex.Y, endVertex.X,
+                                                                                   endVertex.Y, i))
+                                    #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                                    array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                            #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
                             polyline = arcpy.Polyline(array)
                             cursor.insertRow((cell.edges[i],e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, startVertex.X, startVertex.Y, endVertex.X, endVertex.Y, polyline))
 
