@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'vSHandprintedMedium';
+        src: url('../fonts/vSHandprintedMedium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+      }
+
+ /* The following rules are deprecated. */ 
+
+@font-face {
+    font-family: 'vSHandprinted';
+        src: url('../fonts/vSHandprintedMedium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+      }
+

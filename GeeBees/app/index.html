@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>GumBuster</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap-3.3.6.css">
+    <link rel="stylesheet" href="assets/css/themes/simplex.css">
+    
+    <link rel="stylesheet" href="assets/css/font-awesome-4.6.1.css">
+    <!--link rel="stylesheet" href="assets/css/leaflet-0.7.7.css"-->
+    <link rel="stylesheet" href="assets/css/leaflet-1.0.0-rc1.css">
+    <link rel="stylesheet" href="assets/css/MarkerCluster.css">
+    <link rel="stylesheet" href="assets/css/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-slider.css">
+    <!--link rel="stylesheet" href="assets/css/L.Control.Locate.css"-->
+    <link rel="stylesheet" href="assets/css/leaflet.groupedlayercontrol.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/Splat-76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/Splat-120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/Splat-152.png">
+    <link rel="icon" sizes="196x196" href="assets/img/Splat-196.png">
+    <link rel="icon" type="image/x-icon" href="assets/img/Splat.ico">
+    
+    <link rel="stylesheet" media="screen" href="assets/css/vshandprinted.css" type="text/css"/>
+    
+  </head>
+
+  <body>
+    <div class="app-splash">
+        <div class="splash-content">
+            <div class="splash-intro">
+                <div class="title-image">
+                    <img class="uncut" src="assets/img/title.png" />
+                    <img class="cut" src="assets/img/title_cut.png" />
+                </div>
+                <div class="subtitle-text">Predicting Gum Pollution in Toronto</div>
+                <div class="intro-image"><img src="assets/img/Splat-196.png" /></div>
+                <div class="observations-summary">
+                    <div class="caption">Citizen Observations using the GumShoe app:</div>
+                    <div class="city-count obs-badge"><div class="city-count-value obs-badge-value">0</div><div class="obs-badge-label">Toronto</div></div>
+                    <div class="global-count obs-badge"><div class="global-count-value obs-badge-value">0</div><div class="obs-badge-label">Worldwide</div></div>
+                </div>
+                <div class="whereisthegum">
+                    <div class="caption">Where is the gum?</div>
+                    <div class="chart-container"><canvas class="top-ten-chart"></canvas></div>
+                    <div class="info-container">
+                        <div class='top-ten-chart-legend'></div>
+                        <div class='participate'>
+                            Get the GumShoe App and contribute your own observations: <br /><div class="gumshoe-app-img"><a href="https://geo.itunes.apple.com/ca/app/gumshoe-map/id931582747?mt=8" target="_blank"><img src="assets/img/srclayericon.png" /></a></div><a href="https://geo.itunes.apple.com/ca/app/gumshoe-map/id931582747?mt=8" style="display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:135px;height:40px;" target="_blank"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="close-splash"><img src="assets/img/close.png" /></div>
+            </div>
+        </div>
+    </div>
+    <div class="app-logo"></div>
+    <div class="app-logo-splat"><div class="splat-hotspot"></div></div>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+          </div>
+          <div class="navbar-brand">'The 6ix' Edition</div>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cogs white"></i>&nbsp;&nbsp;Options <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a id="ooze-toggle" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-square-o"></i>&nbsp;&nbsp;Gum</a></li>
+                  <li class="gb-ooze-option gb-ooze-option-hidden gb-ooze-speed"><a data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;Speed:&nbsp;&nbsp;<input id="ooze-speed" type="text" /></a></li>
+                  <li class="gb-ooze-option gb-ooze-option-hidden"><a id="ooze-threshold" data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Oooze</a></li>
+                  <li class="gb-ooze-option gb-ooze-option-hidden"><a id="ooze-radial" data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Radial</a></li>
+                  <li class="gb-explode-toggle gb-explode-toggle-hidden"><a id="explode-toggle" data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;<i class="fa fa-square-o"></i>&nbsp;&nbsp;Buster</a></li>
+                  <li class="gb-explode-option gb-explode-option-hidden gb-explode-toggle-hidden"><a id="explode-after" data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Double your pleasure</a></li>
+                  <li class="gb-explode-option gb-explode-option-hidden gb-explode-toggle-hidden"><a id="explode-during" data-toggle="collapse" data-target=".navbar-collapse.in">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Double your fun</a></li>
+                </ul>
+            </li>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+    
+    <div id="container">
+      <div id="map"></div>
+    </div>
+    <div id="loading">
+      <div class="loading-indicator">
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info progress-bar-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:none;">
+        <audio id="dsotc_trailer_audio" loop="true">
+            <source src="../vid/dsotc_trailer.mp4" type="video/mp4" />
+        </audio>
+        <video id="dsotc_trailer" loop="true">
+            <source src="../vid/dsotc_trailer.mp4" type="video/mp4" />
+        </video>
+    </div>
+    <script src="assets/js/jquery-2.1.4.js"></script>
+    <script src="assets/js/bootstrap-3.3.6.js"></script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script-->
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script-->
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script-->
+    <!--script src="assets/js/leaflet-0.7.7.js"></script-->
+    <script src="assets/js/leaflet-1.0.0-rc1.js"></script>
+    <script src="assets/js/simpleheat.js"></script>
+    <script src="assets/js/leaflet-heat.js"></script>
+    <script src="assets/js/leaflet.markercluster.js"></script>
+    <script src="assets/js/bootstrap-slider.js"></script>
+    <!--script src="https://cdn.jsdelivr.net/leaflet.esri/1.0.2/esri-leaflet.js"></script-->
+    <script src="assets/js/esri-leaflet-2.0.0.js"></script>
+    <!--script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script-->
+    <script src="assets/js/leaflet.groupedlayercontrol.js"></script>
+    <!--<script src="assets/js/esri2geo.js"></script>-->
+    <script src="assets/js/tileAnimation.js"></script>
+    <script src="assets/js/countUp.js"></script>
+    <script src="assets/js/countUp-jquery.js"></script>
+    <script src="assets/js/Chart.js"></script>
+    <!--script src="assets/js/jquery.nicescroll.js"></script-->
+    <script src="assets/js/exif.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
