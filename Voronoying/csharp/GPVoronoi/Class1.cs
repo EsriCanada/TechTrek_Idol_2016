@@ -16,7 +16,6 @@ using SharpBoostVoronoi.Output;
 using VPoint = SharpBoostVoronoi.Input.Point;
 using VSegment = SharpBoostVoronoi.Input.Segment;
 
-
 namespace GPVoronoi
 {
 
@@ -676,7 +675,8 @@ namespace GPVoronoi
 
                         if (method == ArcConstructionMethods.Approximate)
                         {
-                            List<IPoint> discretizedEdge = Densify(aoPointSite, aoLineSite.FromPoint, aoLineSite.ToPoint, FromPoint, ToPoint, 1);
+                            //List<IPoint> discretizedEdge = Densify(aoPointSite, aoLineSite.FromPoint, aoLineSite.ToPoint, FromPoint, ToPoint, 1);
+                            List<IPoint> discretizedEdge = Densify(aoPointSite, aoLineSite, FromPoint, ToPoint, 1);
 
                             IPoint prev = discretizedEdge[0];
                             foreach (IPoint v in discretizedEdge.Skip(1))
@@ -821,20 +821,38 @@ namespace GPVoronoi
         {
             return ((IProximityOperator)A).ReturnDistance(B);
         }
-
-        List<IPoint> Densify(IPoint focus, IPoint dir_start, IPoint dir_end, IPoint par_start, IPoint par_end, double tolerance)
+        double getDistance(IPoint A, ISegment B)
         {
+            return ((IProximityOperator)A).ReturnDistance(B);
+        }
+        IPoint getClosestPoint(IPoint A, ISegment L)
+        {
+            IPoint near = new Point();
+            ((IProximityOperator)L).QueryNearestPoint(A, esriSegmentExtension.esriNoExtension, near);
+            return near;
+
+        }
+        List<IPoint> Densify(IPoint focus, ISegment dir, IPoint par_start, IPoint par_end, double tolerance)
+        {
+            IPoint dir_start = dir.FromPoint;
+            IPoint dir_end = dir.ToPoint;
+
             double shift_X = Math.Min(par_start.X, par_end.X);
             double shift_Y = Math.Min(par_start.Y, par_end.Y);
             double angle = lineAngle_rads(dir_start, dir_end);
 
-            IPoint dir_startPoint_rotated = rotate(dir_start, angle, shift_X, shift_Y);
-            IPoint dir_endPoint_rotated = rotate(dir_end, angle, shift_X, shift_Y);
-            double directrix = dir_startPoint_rotated.Y;
+            IPoint focus_rotated = rotate(focus, angle, shift_X, shift_Y);
+
+            IPoint dir_startPoint_rotated = rotate(getClosestPoint(par_start, dir), angle, shift_X, shift_Y);
+            IPoint dir_endPoint_rotated = rotate(getClosestPoint(par_end, dir), angle, shift_X, shift_Y);
+            
+            double directrix = (dir_startPoint_rotated.Y > focus_rotated.Y) ?
+                focus_rotated.Y + getDistance(focus, dir) : focus_rotated.Y - getDistance(focus, dir);
+ 
+            double deltaDist = dir_startPoint_rotated.Y - directrix;
 
             double angle_rotated = lineAngle_rads(dir_startPoint_rotated, dir_endPoint_rotated);
 
-            IPoint focus_rotated = rotate(focus, angle, shift_X, shift_Y);
 
             //(x−a)2+b2−c2=2(b−c)y
 
@@ -898,8 +916,8 @@ namespace GPVoronoi
 
         IPoint rotate(IPoint p, double theta, double shift_x, double shift_y)
         {
-            double X = p.X + (-1 * shift_x);
-            double Y = p.Y + (-1 * shift_y);
+            double X = p.X - shift_x;
+            double Y = p.Y - shift_y;
             double t = -1 * theta;
             return newPoint(
                 (X * Math.Cos(t)) - (Y * Math.Sin(t)),
@@ -926,8 +944,6 @@ namespace GPVoronoi
 
             //while (rotation <= (-1 * Math.PI))
             //    rotation += Math.PI;
-
-            //return Math.Round(rotation, 6);
 
             return Math.Round(Math.Atan2(end.Y - start.Y, end.X - start.X), 6);
         }
