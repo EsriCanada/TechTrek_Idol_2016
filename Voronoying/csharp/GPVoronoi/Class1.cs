@@ -885,16 +885,18 @@ namespace GPVoronoi
 
             List<IPoint> densified = densified_rotated.Select(w => unrotate(w, angle, shift_X, shift_Y)).ToList();
 
-
+            double snapTolerance = 0.5;
             //reset the first and last points so they match exactly.
-            if (Math.Abs(densified[0].X - par_start.X) > 0.05 ||
-                Math.Abs(densified[0].Y - par_start.Y) > 0.05)
-                throw new Exception("Segmented curve start point is not correct");
+            if (Math.Abs(densified[0].X - par_start.X) > snapTolerance ||
+                Math.Abs(densified[0].Y - par_start.Y) > snapTolerance)
+                throw new Exception(String.Format("Segmented curve start point is not correct. Tolerance exeeded in X ({0}) or Y ({1})",
+                    Math.Abs(densified[0].X - par_start.X), Math.Abs(densified[0].Y - par_start.Y)));
             densified[0] = par_start;
 
-            if (Math.Abs(densified[densified.Count - 1].X - par_end.X) > 0.05 ||
-                Math.Abs(densified[densified.Count - 1].Y - par_end.Y) > 0.05)
-                throw new Exception("Segmented curve start point is not correct");
+            if (Math.Abs(densified[densified.Count - 1].X - par_end.X) > snapTolerance ||
+                Math.Abs(densified[densified.Count - 1].Y - par_end.Y) > snapTolerance)
+                throw new Exception(String.Format("Segmented curve end point is not correct. Tolerance exeeded in X ({0}) or Y ({1})",
+                    Math.Abs(densified[densified.Count - 1].X - par_end.X), Math.Abs(densified[densified.Count - 1].Y - par_end.Y)));
             densified[densified.Count - 1] = par_end;
 
             return densified;
