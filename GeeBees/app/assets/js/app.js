@@ -545,16 +545,10 @@ function gbHeatRedrawCanvases() {
 var darkGray = L.esri.basemapLayer("DarkGray");
 var imagery = L.esri.basemapLayer("Imagery");
 var topographic = L.esri.basemapLayer("Topographic");
-var mapquestOSM = L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
-  attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
-});
 
 darkGray.on('tileload',gbHeatRedrawCanvases);
 imagery.on('tileload', gbHeatRedrawCanvases);
 topographic.on('tileload', gbHeatRedrawCanvases);
-mapquestOSM.on('tileload', gbHeatRedrawCanvases);
 
 var mapRenderer = false; // L.canvas();
 map = L.map("map", {
@@ -628,8 +622,7 @@ var zoomControl = L.control.zoom({
 var baseLayers = {
   "Esri Dark Gray": darkGray,
   "Esri Imagery": imagery,
-  "Esri Topographic": topographic,
-  "Open Street Map": mapquestOSM
+  "Esri Topographic": topographic
 };
 
 var groupedOverlays = {};
