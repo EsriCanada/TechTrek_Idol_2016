@@ -30,7 +30,7 @@ var gbPanEnd = Date.now();
 var gbAnimationTime = 2;
 var gbCenter = false;
 var gbCenterResolution = false;
-var gbFrameRate = 30;
+var gbFrameRate = 20;
 var gbOozeMode = 'none';
 
 var gbCityTopTenCats = [];

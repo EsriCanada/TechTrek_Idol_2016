@@ -143,12 +143,19 @@ simpleheat.prototype = {
             ctx.drawImage(this._circle, p[0] - this._r, p[1] - this._r);
         }
         
-        this._rawData = ctx.getImageData(0, 0, this._width, this._height);
+        try
+        {
+            this._rawData = ctx.getImageData(0, 0, this._width, this._height);
 
-        // colorize the heatmap, using opacity value of each pixel to get the right color from our gradient
-        var colored = ctx.getImageData(0, 0, this._width, this._height);
-        this._colorize(colored.data, this._grad);
-        ctx.putImageData(colored, 0, 0);
+            // colorize the heatmap, using opacity value of each pixel to get the right color from our gradient
+            var colored = new ImageData(this._rawData.data, this._width, this._height);
+            this._colorize(colored.data, this._grad);
+            ctx.putImageData(colored, 0, 0);
+        }
+        catch (err)
+        {
+            console.log("Error:", err);
+        }
         
         this._previousSet = set;
         
