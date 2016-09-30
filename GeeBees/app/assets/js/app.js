@@ -6,7 +6,7 @@ var isMobile = (/iPhone|iPod|iPad/.test(navigator.platform) || ua.indexOf("Andro
 
 var gbService = "http://services.arcgis.com/zmLUiqh7X11gGV2d/arcgis/rest/services/GB1/FeatureServer";
 var gbSrcLayerURL = "http://utility.arcgis.com/usrsvcs/servers/2306f81e42284b79b6c9ba9d93646795/rest/services/gumAuthenticated/FeatureServer/0";
-var gbDataPath = "http://peel.cloudapp.net/gumbuster/data/";
+var gbDataPath = "https://arcgis103.esri.ca/gumbuster/data/";
 var gbServiceInfo = false;
 var gbNeighbourhoods = false;
 var gbSiteClusters = new L.MarkerClusterGroup({
