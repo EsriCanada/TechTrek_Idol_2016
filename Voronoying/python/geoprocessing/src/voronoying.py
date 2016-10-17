@@ -13,8 +13,7 @@ import os,sys, traceback, math
 import arcpy
 import pyvoronoi
 
-#arcpy.BoostVoronoi(r'C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS', r'C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2', r'C:\Test\NRN\NRN.gdb\FeatureDataset', 'VORONOYING_POINTS', 'VORONOYING_LINES', 'VORONOYING_POLYGONS'
-#"C:\Test\NRN\NRN.gdb\FeatureDataset\INPUT_POINTS" "C:\Test\NRN\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT_2" "C:\Test\NRN\NRN.gdb\FeatureDataset" "VORONOYING_POINTS" "VORONOYING_LINES" "VORONOYING_POLYGONS"
+#"C:\Test\NRN\TechTrek\NRN.gdb\FeatureDataset\INPUT_POINTS" "C:\Test\NRN\TechTrek\NRN.gdb\FeatureDataset\NRN_OTTAWA_SPLIT_LIGHT" "C:\Test\NRN\TechTrek\NRN.gdb\FeatureDataset" VORONOYING_POINTS VORONOYING_LINES VORONOYING_POLYGONS OBJECTID
 
 def Distance(point1, point2):
     """
@@ -339,8 +338,7 @@ def main():
                         e = edges[cell.edges[i]]
                         startVertex = vertices[e.start]
                         endVertex = vertices[e.end]
-
-                        max_distance  = Distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 20
+                        max_distance  = Distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 10
                         array = arcpy.Array()
                         if startVertex != -1 and endVertex != -1:
                             if(e.is_linear == True):
@@ -348,18 +346,37 @@ def main():
                             
                             else:
                                 try:
-                                    points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance)
+                                    points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance, 1/ factor)
                                     for p in points:
-                                        #print "{0},{1}".format(p[0], p[1])
                                         array.append(arcpy.Point(p[0], p[1]))
-                                except:
+                                except pyvoronoi.FocusOnDirectixException:
                                     arcpy.AddMessage(
-                                        "Issue at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
+                                        "FocusOnDirectixException at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
                                                                                    startVertex.Y, endVertex.X,
-                                                                                   endVertex.Y, i))
-                                    #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+                                                                                   endVertex.Y, cell.edges[i]))
                                     array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
-                            #array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+									
+                                except pyvoronoi.UnsolvableParabolaEquation:
+                                    edge = pv.outputEdges[cell.edges[i]]
+                                    sites = pv.ReturnCurvedSiteInformation(edge)
+                                    pointSite = sites[0]
+                                    segmentSite = sites[1]
+                                    edgeStartVertex = pv.outputVertices[edge.start]
+                                    edgeEndVertex = pv.outputVertices[edge.end]
+
+
+                                    print "Input Point: {0}".format(pointSite)
+                                    print "Input Segment: {0}".format(segmentSite)
+                                    print "Parabola Start: {0}".format([edgeStartVertex.X, edgeStartVertex.Y])
+                                    print "Parabola End: {0}".format([edgeEndVertex.X, edgeEndVertex.Y])
+                                    print "Distance: {0}".format(max_distance)
+
+                                    arcpy.AddMessage(
+                                        "UnsolvableParabolaEquation exception at: {5}. The drawing has been defaulted from a curved line to a straight line. Length {0} - From: {1}, {2} To: {3}, {4}".format(max_distance, startVertex.X,
+                                                                                   startVertex.Y, endVertex.X,
+                                                                               endVertex.Y, cell.edges[i]))
+                                    array = arcpy.Array([arcpy.Point(startVertex.X, startVertex.Y), arcpy.Point(endVertex.X, endVertex.Y)])
+
                             polyline = arcpy.Polyline(array)
                             cursor.insertRow((cell.edges[i],e.start,e.end, e.is_linear, e.is_primary, e.site1, e.site2,e.cell, e.twin, startVertex.X, startVertex.Y, endVertex.X, endVertex.Y, polyline))
 

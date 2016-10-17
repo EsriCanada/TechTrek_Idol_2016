@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BoostVoronoi_4x5x0">
-      <HintPath>..\..\..\..\SharpBoostVoronoi\SharpBoostVoronoi\SharpBoostVoronoi\SharpBoostVoronoi\bin\Debug\BoostVoronoi_4x5x0.dll</HintPath>
+    <Reference Include="BoostVoronoi_4x5x0, Version=1.0.5993.33274, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\BoostVoronoi_4x5x0.dll</HintPath>
     </Reference>
     <Reference Include="ESRI.ArcGIS.ADF, Version=10.3.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -56,8 +57,9 @@
     <Reference Include="ESRI.ArcGIS.System, Version=10.3.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="SharpBoostVoronoi">
-      <HintPath>..\..\..\..\SharpBoostVoronoi\SharpBoostVoronoi\SharpBoostVoronoi\SharpBoostVoronoi\bin\Debug\SharpBoostVoronoi.dll</HintPath>
+    <Reference Include="SharpBoostVoronoi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\SharpBoostVoronoi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

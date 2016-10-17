@@ -15,6 +15,7 @@ using SharpBoostVoronoi.Output;
 
 using VPoint = SharpBoostVoronoi.Input.Point;
 using VSegment = SharpBoostVoronoi.Input.Segment;
+using SharpBoostVoronoi.Exceptions;
 
 namespace GPVoronoi
 {
@@ -304,9 +305,9 @@ namespace GPVoronoi
                 IStepProgressor stepPro = (IStepProgressor)trackcancel;
                 GPHelperFunctions.dropSpatialIndex(outputFeatureClass);
 
-                BoostVoronoi bv = new BoostVoronoi();
+                BoostVoronoi bv = new BoostVoronoi(100);
 
-                int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
+                double minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
                 List<site_key> point_sites = new List<site_key>();
                 List<site_key> segment_sites = new List<site_key>();
 
@@ -334,8 +335,8 @@ namespace GPVoronoi
                             IPoint point = row.Shape as IPoint;
                             if (point != null)
                             {
-                                int X = toI(point.X);
-                                int Y = toI(point.Y);
+                                double X = point.X;
+                                double Y = point.Y;
 
                                 minX = Math.Min(minX, X);
                                 maxX = Math.Max(maxX, X);
@@ -343,7 +344,7 @@ namespace GPVoronoi
                                 minY = Math.Min(minY, Y);
                                 maxY = Math.Max(maxY, Y);
 
-                                bv.AddPoint(X, Y);
+                                bv.AddPoint(point.X, point.Y);
                                 point_sites.Add(new site_key(i, row.OID));
                             }
 
@@ -356,15 +357,15 @@ namespace GPVoronoi
                                 IPoint vertex = null; int part, index;
                                 vertices.Next(out vertex, out part, out index);
 
-                                minX = Math.Min(minX, toI(multipoint.Envelope.XMin));
-                                maxX = Math.Max(maxX, toI(multipoint.Envelope.XMax));
+                                minX = Math.Min(minX, multipoint.Envelope.XMin);
+                                maxX = Math.Max(maxX, multipoint.Envelope.XMax);
 
-                                minY = Math.Min(minY, toI(multipoint.Envelope.YMin));
-                                maxY = Math.Max(maxY, toI(multipoint.Envelope.YMax));
+                                minY = Math.Min(minY, multipoint.Envelope.YMin);
+                                maxY = Math.Max(maxY, multipoint.Envelope.YMax);
 
                                 while (vertex != null)
                                 {
-                                    bv.AddPoint(toI(vertex.X), toI(vertex.Y));
+                                    bv.AddPoint(vertex.X, vertex.Y);
                                     point_sites.Add(new site_key(i, row.OID));
 
                                     vertices.Next(out vertex, out part, out index);
@@ -374,10 +375,10 @@ namespace GPVoronoi
                             IPolyline polyline = row.Shape as IPolyline;
                             if (polyline != null)
                             {
-                                int fromX = toI(polyline.FromPoint.X);
-                                int fromY = toI(polyline.FromPoint.Y);
-                                int toX = toI(polyline.ToPoint.X);
-                                int toY = toI(polyline.ToPoint.Y);
+                                double fromX = polyline.FromPoint.X;
+                                double fromY = polyline.FromPoint.Y;
+                                double toX = polyline.ToPoint.X;
+                                double toY = polyline.ToPoint.Y;
 
                                 if (toX < fromX)
                                 {
@@ -401,7 +402,12 @@ namespace GPVoronoi
                                     maxY = Math.Max(maxY, toY);
                                 }
 
-                                bv.AddSegment(fromX, fromY, toX, toY);
+                                bv.AddSegment(
+                                    polyline.FromPoint.X, polyline.FromPoint.Y,
+                                    polyline.ToPoint.X, polyline.ToPoint.Y
+                                );
+
+
                                 segment_sites.Add(new site_key(i, row.OID));
                             }
 
@@ -470,28 +476,26 @@ namespace GPVoronoi
                     stepPro.MaxRange = cells.Count;
                     stepPro.Show();
 
-                    foreach (var superCell in cells.GroupBy(w=>w.Site))
+
+                    for (int cellIndex = 0; cellIndex < cells.Count; cellIndex++)
                     {
-                        int currentSite = superCell.Key;
-                        IGeometryCollection geometryCollection = new GeometryBagClass() { SpatialReference = spatialReference};
-                       
-                        //foreach (var cell in (from cell in cells orderby cell.Site select cell))
-                        foreach(var cell in superCell)
+                        try
                         {
-                            stepPro.Step();
+                            if(cellIndex % 500 == 0) message.AddMessage(String.Format("{0}. {1} cells processed.", DateTime.Now, cellIndex));
+
+                            Cell cell = cells[cellIndex];
+                            int currentSite = cell.Site;
+                            IGeometryCollection geometryCollection = new GeometryBagClass() { SpatialReference = spatialReference };
 
                             //ignores any sliver cells
-                            if (cell.IsOpen && cell.EdgesIndex.Count < 3)
+                            if (cell.IsOpen || cell.EdgesIndex.Count < 3)
                                 continue;
 
                             ISegmentCollection segmentCollection = createSegments(cell, bv, method, spatialReference);
 
-                            // this seems to mess up the ellipsis
-                            //ITopologicalOperator polygonTopo = (ITopologicalOperator)segmentCollection;
-                            //polygonTopo.Simplify();
-
                             if (((IArea)segmentCollection).Area <= 0)
                             {
+
                                 message.AddMessage("A invalid geometry has been detected, try reversing the orientation.");
                                 ISegmentCollection reversed_segmentCollection = new PolygonClass() { SpatialReference = spatialReference };
                                 for (int i = segmentCollection.SegmentCount - 1; i >= 0; i--)
@@ -505,48 +509,41 @@ namespace GPVoronoi
 
                             ((IPolygon)segmentCollection).SpatialReference = spatialReference;
                             if (((IArea)segmentCollection).Area <= 0)
-                                message.AddWarning("An empty shell has been created");
-                            else
-                                geometryCollection.AddGeometry((IPolygon)segmentCollection);
-                        }
-
-                        //set attributes
-                        site_key sk = (currentSite >= point_sites.Count) ? segment_sites[currentSite - point_sites.Count] : point_sites[currentSite];
-                        if (!sk.isEmpty)
-                        {
-                            buffer.set_Value(featureSourceIndx, input_featureClasses[sk.featureClassIndex].featureclass.AliasName);
-                            buffer.set_Value(featureIDIndx, sk.objectID);
-                        }
-                        else
-                        {
-                            buffer.set_Value(featureSourceIndx, DBNull.Value);
-                            buffer.set_Value(featureIDIndx, DBNull.Value);
-                        }
-
-                        ITopologicalOperator unionedPolygon = new PolygonClass() { SpatialReference = spatialReference };
-                        try
-                        {
-                            unionedPolygon.ConstructUnion((IEnumGeometry)geometryCollection);
-                        }
-                        catch (Exception exx)
-                        {
-                            message.AddWarning("An exception has been encountered during ConstructUnion: " + exx.Message);
-                        }
-
-                        if (((IArea)unionedPolygon).Area <= 0)
-                        {
-                            message.AddWarning("An empty geometry has been created");
-
-                            for (int i = 0; i < geometryCollection.GeometryCount; i++)
                             {
-                                buffer.Shape = (IPolygon)geometryCollection.get_Geometry(i);
-                                inserts.InsertFeature(buffer);
+                                message.AddWarning("An empty shell has been created");
+
+                                for (int i = 0; i < segmentCollection.SegmentCount; i++)
+                                {
+                                    ISegment segment = (ISegment)segmentCollection.get_Segment(i);
+                                    message.AddMessage(String.Format("From {0}, {1} To {2},{3}",
+                                    segment.FromPoint.X, segment.FromPoint.Y,
+                                    segment.ToPoint.X, segment.ToPoint.Y));
+                                }
+
                             }
-                        }
-                        else
-                        {
-                            buffer.Shape = (IPolygon)unionedPolygon;
+
+
+                            //set attributes
+                            site_key sk = (currentSite >= point_sites.Count) ? segment_sites[currentSite - point_sites.Count] : point_sites[currentSite];
+                            if (!sk.isEmpty)
+                            {
+                                buffer.set_Value(featureSourceIndx, input_featureClasses[sk.featureClassIndex].featureclass.AliasName);
+                                buffer.set_Value(featureIDIndx, sk.objectID);
+                            }
+                            else
+                            {
+                                buffer.set_Value(featureSourceIndx, DBNull.Value);
+                                buffer.set_Value(featureIDIndx, DBNull.Value);
+                            }
+
+
+                            IPolygon voronoiPolygon = (IPolygon)segmentCollection;
+                            buffer.Shape = (IPolygon)voronoiPolygon;
                             inserts.InsertFeature(buffer);
+                        }
+                        catch (Exception e)
+                        {
+                            message.AddWarning("Failed to create a cell");
                         }
                     }
                 }
@@ -571,6 +568,7 @@ namespace GPVoronoi
                 ((IProgressor)trackcancel).Hide();
             }
         }
+
 
 
         private ISegmentCollection createSegments(Cell cell,BoostVoronoi bv,ArcConstructionMethods method,ISpatialReference spatialReference)
@@ -616,17 +614,17 @@ namespace GPVoronoi
 
                     //Add a straight line segment
                     Vertex start = vertices[previous.End];
-                    IPoint FromPoint = new PointClass() { X = toD(start.X), Y = toD(start.Y), SpatialReference = spatialReference };
+                    IPoint FromPoint = new PointClass() { X = start.X, Y = start.Y, SpatialReference = spatialReference };
                     Vertex end = vertices[edge.Start];
-                    IPoint ToPoint = new PointClass() { X = toD(end.X), Y = toD(end.Y), SpatialReference = spatialReference };
+                    IPoint ToPoint = new PointClass() { X = end.X, Y = end.Y, SpatialReference = spatialReference };
 
                     segmentCollection.AddSegment(new LineClass() { FromPoint = FromPoint, ToPoint = ToPoint, SpatialReference = spatialReference });
                     previousEndPoint = ToPoint;
                 }
-                else if (edge.IsFinite) //edge.IsFinite()
+                else if (edge.IsFinite)
                 {
                     Vertex start = vertices[edge.End];
-                    IPoint FromPoint = new PointClass() { X = toD(start.X), Y = toD(start.Y), SpatialReference = spatialReference };
+                    IPoint FromPoint = new PointClass() { X = start.X, Y = start.Y, SpatialReference = spatialReference };
                     if (previousEndPoint != null)
                     {
                         if ((Math.Abs(previousEndPoint.X - FromPoint.X) > 0.05 || Math.Abs(previousEndPoint.X - FromPoint.X) > 0.05))
@@ -635,7 +633,7 @@ namespace GPVoronoi
                             FromPoint = previousEndPoint;
                     }
                     Vertex end = vertices[edge.Start];
-                    IPoint ToPoint = new PointClass() { X = toD(end.X), Y = toD(end.Y), SpatialReference = spatialReference };
+                    IPoint ToPoint = new PointClass() { X = end.X, Y = end.Y, SpatialReference = spatialReference };
 
                     if (method == ArcConstructionMethods.Straight || edge.IsLinear)
                     {
@@ -651,32 +649,68 @@ namespace GPVoronoi
                         VPoint pointSite; VSegment lineSite;
                         if (cell.ContainsPoint && twinCell.ContainsSegment)
                         {
-                            pointSite = RetrievePoint(cell, bv);
-                            lineSite = RetrieveLine(twinCell, bv);
+                            pointSite = bv.RetrieveInputPoint(cell);
+                            lineSite = bv.RetrieveInputSegment(twinCell);
                         }
                         else if (cell.ContainsSegment && twinCell.ContainsPoint)
                         {
-                            pointSite = RetrievePoint(twinCell, bv);
-                            lineSite = RetrieveLine(cell, bv);
+                            pointSite = bv.RetrieveInputPoint(twinCell);
+                            lineSite = bv.RetrieveInputSegment(cell);
                         }
+                        
                         else
                         {
                             throw new Exception("Invalid edge, curves should only be present between a point and a line");
                         }
 
-                        IPoint aoPointSite = new Point() { X = toD(pointSite.X), Y = toD(pointSite.Y), SpatialReference = spatialReference };
+                        double scaleFactor = Convert.ToDouble(bv.ScaleFactor);
+                        IPoint aoPointSite = new Point() 
+                        { 
+                                X = Convert.ToDouble(pointSite.X) / scaleFactor, 
+                                Y = Convert.ToDouble(pointSite.Y) / scaleFactor, 
+                                SpatialReference = spatialReference 
+                        };
+
                         ISegment aoLineSite = new LineClass()
                         {
-                            FromPoint = new PointClass() { X = toD(lineSite.Start.X), Y = toD(lineSite.Start.Y), SpatialReference = spatialReference },
-                            ToPoint = new PointClass() { X = toD(lineSite.End.X), Y = toD(lineSite.End.Y), SpatialReference = spatialReference },
+                            FromPoint = new PointClass() 
+                            { 
+                                    X = Convert.ToDouble(lineSite.Start.X) / scaleFactor, 
+                                    Y = Convert.ToDouble(lineSite.Start.Y) / scaleFactor, 
+                                    SpatialReference = spatialReference 
+                            },
+                            ToPoint = new PointClass() 
+                            { 
+                                    X = Convert.ToDouble(lineSite.End.X) / scaleFactor, 
+                                    Y = Convert.ToDouble(lineSite.End.Y) / scaleFactor, 
+                                    SpatialReference = spatialReference 
+                            },
                             SpatialReference = spatialReference
                         };
 
 
                         if (method == ArcConstructionMethods.Approximate)
                         {
-                            //List<IPoint> discretizedEdge = Densify(aoPointSite, aoLineSite.FromPoint, aoLineSite.ToPoint, FromPoint, ToPoint, 1);
-                            List<IPoint> discretizedEdge = Densify(aoPointSite, aoLineSite, FromPoint, ToPoint, 1);
+                            List<Vertex> sampledVerticed = null;
+                            try
+                            {
+                                sampledVerticed = bv.SampleCurvedEdge(edge, aoLineSite.Length / 10);
+
+                            }
+                            catch (FocusOnDirectixException e)
+                            {
+                                //Log any exception here is required
+                                sampledVerticed = new List<Vertex>() { start, end };
+                            }
+                            catch (UnsolvableVertexException e)
+                            {
+                                sampledVerticed = new List<Vertex>() { start, end };
+                            }
+
+                            sampledVerticed.Reverse();
+                            List<IPoint> discretizedEdge = sampledVerticed.Select(
+                                p => new Point() { X = p.X, Y = p.Y }
+                            ).ToList<IPoint>();
 
                             IPoint prev = discretizedEdge[0];
                             foreach (IPoint v in discretizedEdge.Skip(1))
@@ -737,25 +771,12 @@ namespace GPVoronoi
                             IEllipticArc arc = new EllipticArcClass() { SpatialReference = spatialReference };
                             double rotation = lineToFocus.Angle;
                             double from = GetAngle(center, FromPoint);
-                            //double centralAngle = GetAngleDiff(GetAngle(center, ToPoint), from);
 
                             arc.PutCoords(false, center, FromPoint, ToPoint, rotation, minor_length / semiMajor.Length, esriArcOrientation.esriArcMinor);
-                            //arc.PutCoordsByAngle(false, center, from, centralAngle, rotation, semiMajor.Length, minor_length / semiMajor.Length);
 
                             segmentCollection.AddSegment((ISegment)arc);
                             previousEndPoint = arc.ToPoint;
 
-                            //IPoint midpoint = discretizedEdge[discretizedEdge.Count / 2];
-                            //IPoint firstQuater = discretizedEdge[discretizedEdge.Count / 4];
-                            //IPoint lastQuater = discretizedEdge[(discretizedEdge.Count / 4) * 3];
-
-                            //IConstructEllipticArc ellipticArc = new EllipticArcClass();
-                            //ellipticArc.ConstructUpToFivePoints(FromPoint, ToPoint,
-                            //    new Point() { X = (midpoint.X), Y = (midpoint.Y) },
-                            //    new Point() { X = (firstQuater.X), Y = (firstQuater.Y) },
-                            //    new Point() { X = (lastQuater.X), Y = (lastQuater.Y) });
-
-                            //segmentCollection.AddSegment((ISegment)ellipticArc);
                         }
                     }
                 }
@@ -763,59 +784,20 @@ namespace GPVoronoi
             return segmentCollection;
         }
 
-        private double GetAngle(VSegment line)
-        {
-            return GetAngle(line.Start, line.End);
-        }
-        private double GetAngle(VPoint Start, VPoint End)
-        {
-            return GetAngle(new PointClass() { X = toD(Start.X), Y = toD(Start.Y) }, new PointClass() { X = toD(End.X), Y = toD(End.Y) });
-        }
+
+
         private double GetAngle(IPoint from, IPoint to)
         {
             ILine line = new LineClass() { FromPoint = from, ToPoint = to };
             return line.Angle;
         }
 
-        double GetAngleDiff(double A, double B)
-        {
-            //IVector3D vA = new Vector3D() as IVector3D;
-            //vA.PolarSet(A, 0, 1);
-
-            //IVector3D vB = new Vector3D() as IVector3D;
-            //vB.PolarSet(B, 0, 1);
-
-            //return Math.Acos(vA.DotProduct(vB));
-
-            return Math.Atan2(Math.Sin(A - B), Math.Cos(B - A));
-        }
-
-        private VPoint RetrievePoint(Cell cell, BoostVoronoi bv)
-        {
-            if (cell.SourceCategory == CellSourceCatory.SinglePoint)
-                return bv.InputPoints[cell.Site];
-            else if (cell.SourceCategory == CellSourceCatory.SegmentStartPoint)
-                return RetrieveLine(cell, bv).Start;
-            else
-                return RetrieveLine(cell, bv).End;
-        }
-        private VSegment RetrieveLine(Cell cell, BoostVoronoi bv)
-        {
-            return bv.InputSegments[cell.Site - bv.InputPoints.Count];
-        }
 
         int toI(double v)
         {
             return (int)(v * 100.0); 
         }
-        double toD(int v)
-        {
-            return ((double)v) / 100.0;
-        }
-        double toD(double v)
-        {
-            return ((double)v) / 100.0;
-        }
+
 
         double getDistance(IPoint A, IPoint B)
         {
@@ -832,75 +814,7 @@ namespace GPVoronoi
             return near;
 
         }
-        List<IPoint> Densify(IPoint focus, ISegment dir, IPoint par_start, IPoint par_end, double tolerance)
-        {
-            IPoint dir_start = dir.FromPoint;
-            IPoint dir_end = dir.ToPoint;
 
-            double shift_X = Math.Min(par_start.X, par_end.X);
-            double shift_Y = Math.Min(par_start.Y, par_end.Y);
-            double angle = lineAngle_rads(dir_start, dir_end);
-
-            IPoint focus_rotated = rotate(focus, angle, shift_X, shift_Y);
-
-            IPoint dir_startPoint_rotated = rotate(getClosestPoint(par_start, dir), angle, shift_X, shift_Y);
-            IPoint dir_endPoint_rotated = rotate(getClosestPoint(par_end, dir), angle, shift_X, shift_Y);
-            
-            double directrix = (dir_startPoint_rotated.Y > focus_rotated.Y) ?
-                focus_rotated.Y + getDistance(focus, dir) : focus_rotated.Y - getDistance(focus, dir);
- 
-            double deltaDist = dir_startPoint_rotated.Y - directrix;
-
-            double angle_rotated = lineAngle_rads(dir_startPoint_rotated, dir_endPoint_rotated);
-
-
-            //(x−a)2+b2−c2=2(b−c)y
-
-            IPoint par_startPoint_rotated = rotate(par_start, angle, shift_X, shift_Y);
-            IPoint par_endPoint_rotated = rotate(par_end, angle, shift_X, shift_Y);
-
-            double max_distance = 0.1;
-            List<IPoint> densified_rotated = new List<IPoint>();
-            Stack<IPoint> next = new Stack<IPoint>();
-            IPoint previous = newPoint(par_startPoint_rotated.X, porabola_y(par_startPoint_rotated.X, focus_rotated, directrix));
-            densified_rotated.Add(previous);
-            next.Push(newPoint(par_endPoint_rotated.X, porabola_y(par_endPoint_rotated.X, focus_rotated, directrix)));
-
-            while (next.Count > 0)
-            {
-                IPoint current = next.Peek();
-                IPoint mid_cord = newPoint((previous.X + current.X) / 2, (previous.Y + current.Y) / 2);
-                IPoint mid_curve = newPoint(mid_cord.X, porabola_y(mid_cord.X, focus_rotated, directrix));
-                if(distance(mid_cord, mid_curve) > max_distance)
-                {
-                    next.Push(mid_curve);
-                }
-                else
-                {
-                    next.Pop();
-                    densified_rotated.Add(current);
-                    previous = current;
-                }
-            }
-
-            List<IPoint> densified = densified_rotated.Select(w => unrotate(w, angle, shift_X, shift_Y)).ToList();
-
-            double snapTolerance = 0.5;
-            //reset the first and last points so they match exactly.
-            if (Math.Abs(densified[0].X - par_start.X) > snapTolerance ||
-                Math.Abs(densified[0].Y - par_start.Y) > snapTolerance)
-                throw new Exception(String.Format("Segmented curve start point is not correct. Tolerance exeeded in X ({0}) or Y ({1})",
-                    Math.Abs(densified[0].X - par_start.X), Math.Abs(densified[0].Y - par_start.Y)));
-            densified[0] = par_start;
-
-            if (Math.Abs(densified[densified.Count - 1].X - par_end.X) > snapTolerance ||
-                Math.Abs(densified[densified.Count - 1].Y - par_end.Y) > snapTolerance)
-                throw new Exception(String.Format("Segmented curve end point is not correct. Tolerance exeeded in X ({0}) or Y ({1})",
-                    Math.Abs(densified[densified.Count - 1].X - par_end.X), Math.Abs(densified[densified.Count - 1].Y - par_end.Y)));
-            densified[densified.Count - 1] = par_end;
-
-            return densified;
-        }
         private IPoint newPoint(double x, double y)
         {
             return new PointClass() { X = x, Y = y };
@@ -916,39 +830,9 @@ namespace GPVoronoi
             return (Math.Pow(x - focus.X, 2) + Math.Pow(focus.Y, 2) - Math.Pow(directrix_y, 2)) / (2 * (focus.Y - directrix_y));
         }
 
-        IPoint rotate(IPoint p, double theta, double shift_x, double shift_y)
-        {
-            double X = p.X - shift_x;
-            double Y = p.Y - shift_y;
-            double t = -1 * theta;
-            return newPoint(
-                (X * Math.Cos(t)) - (Y * Math.Sin(t)),
-                (X * Math.Sin(t)) + (Y * Math.Cos(t))
-                );
-        }
-        IPoint unrotate(IPoint p, double theta, double shift_x, double shift_y)
-        {
-            return newPoint(
-                (p.X * Math.Cos(theta)) - (p.Y * Math.Sin(theta)) + shift_x,
-                (p.X * Math.Sin(theta)) + (p.Y * Math.Cos(theta)) + shift_y
-                );
-        }
 
-        double lineAngle_rads(IPoint start, IPoint end)
-        {
-            //double dx = end.X - start.X;
-            //double dy = end.Y - start.Y;
 
-            //double rotation = Math.Atan(dy / dx);
 
-            //while (rotation >= Math.PI)
-            //    rotation -= Math.PI;
-
-            //while (rotation <= (-1 * Math.PI))
-            //    rotation += Math.PI;
-
-            return Math.Round(Math.Atan2(end.Y - start.Y, end.X - start.X), 6);
-        }
 
         // This is the function name object for the Geoprocessing Function Tool. 
         // This name object is created and returned by the Function Factory.
