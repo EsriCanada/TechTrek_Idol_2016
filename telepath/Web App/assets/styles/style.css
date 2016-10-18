@@ -1,0 +1,197 @@
+@import url(../vendor/calcite-maps/dist/css/calcite-maps-arcgis-4.x.min.css);
+/* Computes a top-shadow for a card effect.
+/// @param {Number} $depth - depth level
+/// @return {List} */
+/* Computes a bottom-shadow for a card effect.
+/// @param {Number} $depth - depth level
+/// @return {List} */
+/* Gives a card depth effect.
+/// @param {Number} $depth - depth level (between 1 and 5)
+/// @link http://www.google.com/design/spec/layout/layout-principles.html#layout-principles-dimensionality Google Design
+/// @requires {function} top-shadow
+/// @requires {function} bottom-shadow */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#play, #stop, .distance-container {
+  display: inline-block;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+.distance-container {
+  float: right;
+}
+
+.distance-label, .distance-value {
+  display: inline-block;
+}
+
+.distance {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  font-size: 1.6em;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.wide-btn {
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1.6em;
+}
+.wide-btn .glyphicon {
+  top: 3px;
+}
+
+.panel-about {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  -moz-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+.panel-about.panel-hidden {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#timelineDiv {
+  height: 60%;
+  width: 25px;
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  background-color: rgba(200, 200, 200, 0.7);
+  border: inset 1px silver;
+  border-radius: 10px;
+}
+
+#timelineDiv .vTimeline {
+  height: 100%;
+  border-left: dashed 2px #56a5d8;
+  margin-left: 10px;
+}
+
+#timelineDiv .loaded {
+  content: url("http://webhelp.esri.com/arcgisexplorer/1500/gpsicons/GPX_36_radio_beacon.png");
+  width: 30px;
+  left: -5px;
+  /*content: url("http://static.arcgis.com/images/Symbols/Transportation/AmberBeacon.png");*/
+}
+
+#timelineDiv .moment {
+  position: absolute;
+  width: 24px;
+  left: 0;
+  cursor: pointer;
+}
+
+#timelineDiv .over {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/WhiteBeacon.png");
+}
+
+#timelineDiv .past {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/BlackBeacon.png");
+}
+
+#timelineDiv .current {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/GreenBeacon.png");
+  width: 28px;
+  left: -2px;
+}
+
+#timelineDiv .start {
+  content: url("http://static.arcgis.com/images/Symbols/Shapes/GreenDiamondLargeB.png");
+}
+
+#timelineDiv .end {
+  content: url("http://static.arcgis.com/images/Symbols/Shapes/RedSquareLargeB.png");
+}
+
+#timelineDiv .next {
+  width: 28px;
+  left: -2px;
+}
+
+.moment-modal {
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.95);
+  max-width: 35em;
+  max-height: 60%;
+  z-index: 1060;
+  top: 50%;
+  right: 3%;
+  bottom: auto;
+  left: auto;
+  -webkit-transform: translateX(0) translateY(-50%);
+  -moz-transform: translateX(0) translateY(-50%);
+  -ms-transform: translateX(0) translateY(-50%);
+  -o-transform: translateX(0) translateY(-50%);
+  transform: translateX(0) translateY(-50%);
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, -webkit-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  -moz-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, -moz-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.moment-modal.moment-hidden {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), -moz-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translateX(0) translateY(-20%);
+  -moz-transform: translateX(0) translateY(-20%);
+  -ms-transform: translateX(0) translateY(-20%);
+  -o-transform: translateX(0) translateY(-20%);
+  transform: translateX(0) translateY(-20%);
+}
+.moment-modal.moment-hidden-up {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), -moz-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translateX(0) translateY(-80%);
+  -moz-transform: translateX(0) translateY(-80%);
+  -ms-transform: translateX(0) translateY(-80%);
+  -o-transform: translateX(0) translateY(-80%);
+  transform: translateX(0) translateY(-80%);
+}
+.moment-modal .moment-content {
+  padding: 0 1em 1.5em;
+}
+.moment-modal .moment-content div:not(:last-child) {
+  padding-bottom: 1em;
+}
+.moment-modal .modal-img, .moment-modal .modal-video {
+  position: relative;
+  text-align: center;
+}
+.moment-modal .modal-img img, .moment-modal .modal-video video {
+  max-width: 80%;
+  margin: 0 auto;
+}
+.moment-modal .modal-end {
+  font-weight: bold;
+}
+.moment-modal .btn {
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1.6em;
+}
+.moment-modal .btn .glyphicon {
+  top: 3px;
+}
+
+/*# sourceMappingURL=style.css.map */

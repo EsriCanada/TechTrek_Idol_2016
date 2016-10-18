@@ -1,0 +1,78 @@
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+// center vertically and/or horizontally an absolute positioned element
+// Credit: codyhouse.io
+
+@mixin center($xy: "xy") {
+  @if $xy == "xy" {
+    left: 50%;
+    top: 50%;
+    bottom: auto;
+    right: auto;
+    @include transform(translateX(-50%) translateY(-50%));
+  }
+  @else if $xy == "x" {
+    left: 50%;
+    right: auto;
+    @include transform(translateX(-50%));
+  }
+  @else if $xy == "y" {
+    top: 50%;
+    bottom: auto;
+    @include transform(translateY(-50%));
+  }
+}
+
+// Add a fade-up animation to an element
+
+@mixin fade-up() {
+  visibility: visible;
+  opacity: 1;
+  @include transition(visibility 0s cubic-bezier(0.4, 0, 0.2, 1),
+                      opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s,
+                      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s);
+  &.moment-hidden {
+    visibility: hidden;
+    opacity: 0;
+    @include transition(visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1));
+
+      @include transform(translateX(0) translateY(-20%));
+  }
+
+  &.moment-hidden-up {
+    visibility: hidden;
+    opacity: 0;
+    @include transition(visibility 0s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1));
+
+      @include transform(translateX(0) translateY(-80%));
+  }
+}
+
+// border radius
+
+@mixin border-radius($radius: 0.25em) {
+  border-radius: $radius;
+}
+
+/* Gives a card depth effect.
+/// @param {Number} $depth - depth level (between 1 and 5)
+/// @link http://www.google.com/design/spec/layout/layout-principles.html#layout-principles-dimensionality Google Design
+/// @requires {function} top-shadow
+/// @requires {function} bottom-shadow */
+
+@mixin material-shadow($depth) {
+  @if $depth < 1 {
+    box-shadow: none;
+  } @else if $depth > 5 {
+    @warn "Invalid $depth `#{$depth}` for mixin `card`.";
+  } @else {
+    box-shadow: bottom-shadow($depth), top-shadow($depth);
+  }
+}

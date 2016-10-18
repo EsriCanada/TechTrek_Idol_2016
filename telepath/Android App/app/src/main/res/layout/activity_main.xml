@@ -1,0 +1,156 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#000000">
+
+    <com.esri.arcgisruntime.mapping.view.MapView
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/horizontalScrollView">
+    </com.esri.arcgisruntime.mapping.view.MapView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Elapsed Time"
+        android:id="@+id/textView"
+        android:textColor="#909090"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:textSize="15sp"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Distance"
+        android:id="@+id/textView2"
+        android:textColor="#909090"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:gravity="right"
+        android:textSize="15sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="00:00:00"
+        android:id="@+id/textView3"
+        android:textColor="#909090"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0.00 km"
+        android:id="@+id/textView4"
+        android:textColor="#909090"
+        android:textSize="20sp"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit"
+        android:adjustViewBounds="true"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        android:background="@android:drawable/ic_menu_upload"
+        android:visibility="invisible"
+        android:layout_above="@+id/submitText"
+        android:layout_alignRight="@+id/add"
+        android:layout_alignEnd="@+id/add" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="45pt"
+        android:id="@+id/horizontalScrollView"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:id="@+id/thumbnails"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="2dp"/>
+    </HorizontalScrollView>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete"
+        android:background="@android:drawable/ic_menu_close_clear_cancel"
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/submit"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/submit"
+        android:layout_alignRight="@+id/deleteText"
+        android:layout_alignEnd="@+id/deleteText" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/record"
+
+        android:background="@drawable/icontrans"
+        android:layout_alignBottom="@+id/mapView"
+        android:layout_centerHorizontal="true"
+        android:clickable="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        android:background="@android:drawable/ic_menu_add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Submit"
+        android:id="@+id/submitText"
+        android:layout_above="@+id/horizontalScrollView"
+        android:layout_alignRight="@+id/submit"
+        android:layout_alignEnd="@+id/submit"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Delete"
+        android:id="@+id/deleteText"
+        android:layout_below="@+id/delete"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+</RelativeLayout>

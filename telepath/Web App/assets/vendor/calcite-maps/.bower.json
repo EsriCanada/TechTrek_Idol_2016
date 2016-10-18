@@ -1,0 +1,47 @@
+{
+  "name": "calcite-maps",
+  "homepage": "https://github.com/esri/calcite-maps",
+  "authors": [
+    "Allan Laframboise <alaframboise@esri.com>"
+  ],
+  "description": "A framework for building map apps with Calcite styles and Bootstrap.",
+  "main": [
+    "dist/js",
+    "dist/css",
+    "dist/fonts"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "Esri",
+    "ArcGIS",
+    "Map",
+    "Map App",
+    "Calcite",
+    "Bootstrap",
+    "Calcite-Bootstrap",
+    "Calcite-Maps"
+  ],
+  "license": "Apache2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "gruntfile.js"
+  ],
+  "dependencies": {
+    "dojo-bootstrap": "~3.0.2"
+  },
+  "_release": "d2d72b7926",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d2d72b7926ccaa05dae522dcb53b8e195fad040b"
+  },
+  "_source": "https://github.com/cplouffe/calcite-maps.git",
+  "_target": "master",
+  "_originalSource": "https://github.com/cplouffe/calcite-maps.git"
+}
