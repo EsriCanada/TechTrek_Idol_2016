@@ -272,20 +272,6 @@ public class MainActivity extends Activity implements
         map.getOperationalLayers().add(layer);
         mMapView.setMap(map);
 
-        JSONObject data = new JSONObject();
-
-        try {
-            //data.put("f", "json");
-            data.put("client_id", "PCxobQLvRvGlkUi5");
-            data.put("client_secret", "6f911ea8d7b34739b2fefb63b58bd633");
-            data.put("grant_type", "client_credentials");
-            data.put("expiration", "1440");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE));
         credential.setSelectedAccountName("ENTER GMAIL ADDRESS HERE");
         service = new com.google.api.services.drive.Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential).setApplicationName("\"AppName/1.0\"").build();
