@@ -104,21 +104,21 @@ namespace GPVoronoi
                 ((IGPParameterEdit)curveTypeParameter).Domain = (IGPDomain)cvDomain;
                 parameters.Add(curveTypeParameter);
 
-                parameters.Add(CreateParameter(
-                   new GPLinearUnitTypeClass(),
-                   new GPLinearUnitClass() { Value = 1, Units = esriUnits.esriMeters },
-                   esriGPParameterDirection.esriGPParameterDirectionInput,
-                   "Snapping Tolerance",
-                   "tolerance",
-                   esriGPParameterType.esriGPParameterTypeOptional));
-
-                parameters.Add(CreateParameter(
-                    new GPFieldMappingTypeClass(),
-                    new GPFieldMappingClass(),
-                    esriGPParameterDirection.esriGPParameterDirectionInput,
-                    "Field Map",
-                    "fieldMap",
-                    esriGPParameterType.esriGPParameterTypeOptional));
+               // parameters.Add(CreateParameter(
+               //    new GPLinearUnitTypeClass(),
+               //    new GPLinearUnitClass() { Value = 1, Units = esriUnits.esriMeters },
+               //    esriGPParameterDirection.esriGPParameterDirectionInput,
+               //    "Snapping Tolerance",
+               //    "tolerance",
+               //    esriGPParameterType.esriGPParameterTypeOptional));
+               //
+               // parameters.Add(CreateParameter(
+               //     new GPFieldMappingTypeClass(),
+               //     new GPFieldMappingClass(),
+               //     esriGPParameterDirection.esriGPParameterDirectionInput,
+               //     "Field Map",
+               //     "fieldMap",
+               //     esriGPParameterType.esriGPParameterTypeOptional));
 
                 return parameters;
             }
@@ -136,6 +136,7 @@ namespace GPVoronoi
             inputParameter.Name = name;
             inputParameter.ParameterType = parameterType;
 
+          
             return (IGPParameter)inputParameter;
         }
         
@@ -481,7 +482,7 @@ namespace GPVoronoi
                     {
                         try
                         {
-                            if(cellIndex % 500 == 0) message.AddMessage(String.Format("{0}. {1} cells processed.", DateTime.Now, cellIndex));
+                            if(cellIndex % 5000 == 0) message.AddMessage(String.Format("{0}. {1} cells processed.", DateTime.Now, cellIndex));
 
                             Cell cell = cells[cellIndex];
                             int currentSite = cell.Site;

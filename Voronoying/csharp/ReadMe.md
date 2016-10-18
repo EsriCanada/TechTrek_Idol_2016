@@ -4,14 +4,13 @@ This tool uses the following library in order to generate Voronoi cells from lin
 
 #Usage
 
-The tool does not contains a proper documentation file (need to figure out the creation of chm file yet.). The tool takes the following parameters:
+In short, the tool takes the following parameters:
 
 1. Input Features: a set of input lines and points. Lines must not crosses each other. Lines must have only 2 points.
 2. Output Feature Class: the output feature class.
 3. Curve type: the method used to interpolate the curve.
-4. Snapping tolerance: the tolerance used to snap the cell together.
-4. The field map: for futur use.
 
+The tool has is provided with an help. Use the help section of the geoprocessing tool for information on proper usage, and the limitations.
 
 #Registration
 
