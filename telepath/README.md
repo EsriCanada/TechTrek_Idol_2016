@@ -6,8 +6,7 @@ _Team members: Cameron Plouffe, Michael Luubert, Krista Amolins_
 * The path is represented as a polyline and the moments are represented as points with an attribute pointing to the URL of the associated photos or videos.
 * You can view the Web app with some sample paths [here](https://luubert.github.io/TechTrek_Idol_2016/telepath/Web%20App/all-paths.html). 
 
-## Setting up telepath
-* telepath relies on the following:
+## Requirements for setting up telepath
 * An ArcGIS Online account for storing the path and moment feature services
 * A Google account for storing photos and videos on Google Drive
 
@@ -17,10 +16,10 @@ _Team members: Cameron Plouffe, Michael Luubert, Krista Amolins_
 
 ## Android app
 * The Android app is not currently available on the Google Play Store, but the code is available in the Android app folder. You will need Android Studio to build the app and transfer it to your phone.
-* Visit [here](https://developers.google.com/drive/android/auth) to find instruction how to authorize the telepath Android apps to work with your Google Drive account.
+* Go [here](https://developers.google.com/drive/android/auth) for instruction how to authorize the telepath Android apps to work with your Google Drive account.
 * You also need to update the following lines of code of the MainActivity.java file:
-- Line 290 with the email associated with your Google Drive account 
-- Line 472, 488, and 505 with the URL of the feature services you published to ArcGIS Online
+    * Line 290 with the email associated with your Google Drive account 
+    * Line 472, 488, and 505 with the URL of the feature services you published to ArcGIS Online
 
 ## Web App
 * The code behind the Web app is available in the Web app folder. To deploy the app on your server you will need to update the following:
