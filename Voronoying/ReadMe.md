@@ -5,6 +5,7 @@
 
    * Fabien Ancelin
    * Marc St. Onge
+   * Travis Val   
    
    
 ##Technology mix:

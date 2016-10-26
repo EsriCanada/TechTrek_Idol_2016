@@ -1,0 +1,11 @@
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\GPVoronoi.dll
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\GPVoronoi.pdb
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\BoostVoronoi_4x5x0.dll
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\ESRI.ArcGIS.ADF.dll
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\SharpBoostVoronoi.dll
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\BoostVoronoi_4x5x0.pdb
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\ESRI.ArcGIS.ADF.xml
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\bin\Debug\SharpBoostVoronoi.pdb
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\obj\Debug\GPVoronoi.dll
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\obj\Debug\GPVoronoi.pdb
+C:\github\TechTrek_Idol_2016\Voronoying\csharp\GPVoronoi\obj\Debug\GPVoronoi.csprojResolveAssemblyReference.cache
