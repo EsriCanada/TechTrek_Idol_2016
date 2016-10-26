@@ -1,0 +1,30 @@
+// ┌──────────────┐
+// │ Map Position │
+// └──────────────┘
+//
+// Full page and partial page
+
+.calcite-maps {
+
+  // Map
+
+  .map-container {
+    width: auto;
+    height: auto;
+  }
+
+  .map-position-absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .map-position-fixed {
+    position: relative;
+    width: $map_fixed_width;
+    height: $map_fixed_height;
+  }
+
+}

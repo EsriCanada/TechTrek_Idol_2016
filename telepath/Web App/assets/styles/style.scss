@@ -1,0 +1,23 @@
+// Imports
+// dist/css/calcite-maps-all.css', 'dist/css/layouts/inline-zoom.css', 'dist/css/layouts/jumbo-title.css', 'dist/css/layouts/mobile-focus.css','dist/css/support/arcgis-4.x.css'
+
+// Main ArcGIS JS API styles
+// @import 'view';
+
+// Calcite styles
+// @import 'build-all';
+// @import 'layouts/inline-zoom';
+// @import 'layouts/jumbo-title';
+// @import 'layouts/mobile-focus';
+// @import 'support/arcgis-4.x';
+@import '../vendor/calcite-maps/dist/css/calcite-maps-arcgis-4.x.min.css';
+
+// Bourbon helpers
+@import 'bourbon';
+// App specific styles
+@import 'partials/variables';
+@import 'partials/functions';
+@import 'partials/mixins';
+@import 'partials/main';
+@import 'partials/timeline';
+@import 'partials/modal';

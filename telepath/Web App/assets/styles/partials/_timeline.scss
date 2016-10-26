@@ -1,0 +1,54 @@
+
+#timelineDiv {
+  height: 60%;
+  width: 25px;
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  background-color: rgba(200,200,200,.7);
+  border: inset 1px silver;
+  border-radius: 10px;
+}
+#timelineDiv .vTimeline {
+  height: 100%;
+  border-left: dashed 2px rgb(86,165,216);
+  margin-left: 10px;
+}
+
+#timelineDiv .loaded {
+  content: url("http://webhelp.esri.com/arcgisexplorer/1500/gpsicons/GPX_36_radio_beacon.png");
+  width: 30px;
+  left: -5px;
+  /*content: url("http://static.arcgis.com/images/Symbols/Transportation/AmberBeacon.png");*/
+}
+#timelineDiv .moment {
+  position: absolute;
+  width: 24px;
+  left: 0;
+  cursor: pointer;
+}
+
+#timelineDiv .over {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/WhiteBeacon.png");
+}
+#timelineDiv .past {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/BlackBeacon.png");
+}
+#timelineDiv .current {
+  content: url("http://static.arcgis.com/images/Symbols/Transportation/GreenBeacon.png");
+  width: 28px;
+  left: -2px;
+}
+
+#timelineDiv .start {
+  content: url("http://static.arcgis.com/images/Symbols/Shapes/GreenDiamondLargeB.png");
+}
+#timelineDiv .end {
+  content: url("http://static.arcgis.com/images/Symbols/Shapes/RedSquareLargeB.png");
+}
+
+#timelineDiv .next {
+  width: 28px;
+  left: -2px;
+}
+

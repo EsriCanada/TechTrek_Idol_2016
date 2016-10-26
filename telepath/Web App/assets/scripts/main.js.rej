@@ -1,0 +1,11 @@
+diff a/app/assets/scripts/main.js b/app/assets/scripts/main.js	(rejected hunks)
+@@ -109,7 +109,8 @@
+       momentsUrl:'http://services.arcgis.com/hNP0AsFlTAoVqfxx/arcgis/rest/services/Moments/FeatureServer/0',
+       momentsCount:0,
+       moments: null,
+-      currentMoment: 0, // stores index
++      currentMoment: 0,
++      currentMID: 0, // stores index
+       momentGraphics: null,
+       momentSymbolColors:['#00cf00','#ff3c28','#e9d200','#ce24eb','#ff8e00'],
+       moments2D: null,

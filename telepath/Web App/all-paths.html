@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="Calcite-Maps Demo - ArcGIS">
+  <meta name="author" content="">
+  <link rel="icon" href="//www.esri.com/favicon.ico">
+  <title>telepath All Paths</title>
+  <link rel="stylesheet" href="//js.arcgis.com/4.0/esri/css/main.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
+  
+  <style>
+    html, body{
+      height: 100%;
+    }
+    main{
+      padding-top: 1em;
+    }
+    header{
+      background-color: #afbdcb;
+      height: 4em;
+      margin-bottom: 1em;
+      padding: 0.5em;
+    }
+    header img{
+      height: 3em;
+      float:left;
+    }
+    header h1{
+      float: left;
+      margin: 0.25em 1em;
+      color: #f8f8f8;
+    }
+    .pathListDiv {
+      float: left;
+      width: 50%;
+    }
+    .pathListDiv table{
+      margin: 2em;
+    }
+    .pathListDiv td, th {
+      padding: 0 0.5em;
+    }
+    #mapViewDiv {
+      float: left;
+      width: 50%;
+      height: 25em;
+    }
+  </style>
+</head>
+<body>
+  <main>
+  <header>
+  <img src="telepath2.png" />
+    <h1>telepaths</h1>
+  </header>
+  
+    <div class="pathListDiv">
+      <table id="pathTable">
+        <thead><tr><th>Path</th><th>User</th><th>Link</th></tr></thead>
+      </table>
+    </div>
+    <div id="mapViewDiv"></div>
+  </main>
+  
+  <script src="//js.arcgis.com/4.0/"></script>
+  <!--script src="assets/scripts/init.js"></script-->
+  <script>
+require([
+  "esri/Map",
+  "esri/views/MapView",
+  "esri/layers/FeatureLayer",
+  "dojo/request",
+  "dojo/dom-construct",
+  "dojo/domReady!"
+], function(Map, MapView, FeatureLayer,
+            request, domConstruct) {
+  
+  
+  
+    var map = new Map({basemap: "topo"});
+    var view = new MapView({
+      container: "mapViewDiv",
+      map:map,
+      center: [-81, 45.5],
+      zoom: 6
+    });
+    var momentsLayer = new FeatureLayer({ 
+      url:"http://services.arcgis.com/hNP0AsFlTAoVqfxx/arcgis/rest/services/Moments/FeatureServer/0"
+    });
+  var pathLayer = new FeatureLayer({
+    url:"http://services.arcgis.com/hNP0AsFlTAoVqfxx/arcgis/rest/services/path/FeatureServer/0",
+    outFields:["*"]
+    });
+  map.addMany([momentsLayer, pathLayer]);
+  
+  view.whenLayerView(pathLayer).then(function(lyrView) {
+    lyrView.watch("updating", function (val) {  
+      if (!val) { // wait for the layer view to finish updating
+        lyrView.queryFeatures().then(function (results) {
+          var pathIDs = [];
+          results.forEach(function(result, index){
+            segment = result.attributes.SegmentID;
+            if(segment == 0){
+              pathIDs.push(result.attributes.PathID);
+            }  
+          });
+          
+          request("pathinfo.json", {handleAs: "json"}).then(function(response){
+            buildTable(response.paths, pathIDs);
+          }, function(err){console.log(err);});
+        });
+      }
+    });
+  });
+  
+  function buildTable(pathInfo, pathIDs){
+          pathIDs.forEach(function(path, index){
+            console.log(pathInfo[path]);
+            var pathName = "New Path";
+            var userName = "test user";
+            
+            if(pathInfo[path] !== undefined){
+              pathName = pathInfo[path]["name"];
+              userName = pathInfo[path]["user"];
+            }
+            var row = domConstruct.create("tr");
+            domConstruct.create("td", {
+              textContent: pathName
+            }, row);
+            domConstruct.create("td", {
+              textContent: userName
+            }, row);
+            var link = domConstruct.create("td", {}, row);
+            domConstruct.create("a", {
+              href:"index.html?PathID="+path,
+              textContent: "Retrace"
+            },link);
+            
+            domConstruct.place(row, document.getElementById("pathTable"));
+          });
+  }
+    
+});
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,51 @@
+.moment-modal {
+
+  position: fixed;
+  background-color: $modal-background-colour;
+  max-width: $modal-max-width;
+  max-height: $modal-max-height;
+  z-index: $modal-z-index;
+  top: 50%;
+  right: $modal-right;
+  bottom: auto;
+  left: auto;
+  @include transform(translateX(0) translateY(-50%));
+  @include fade-up;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .moment-content {
+    padding: $modal-padding;
+
+    div:not(:last-child) {
+      padding-bottom: $modal-section-padding;
+    }
+
+  }
+
+  .modal-img, .modal-video {
+    position: relative;
+    text-align: center;
+  }
+
+  .modal-img img, .modal-video video {
+    max-width: 80%;
+    margin: 0 auto
+  }
+
+  .modal-end {
+    font-weight: bold;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 1.6em;
+
+    .glyphicon {
+      top: 3px;
+    }
+
+  }
+
+}
