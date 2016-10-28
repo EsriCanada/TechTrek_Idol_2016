@@ -160,7 +160,6 @@ weewx[661]: reportengine: copied 9 files to /var/www/html/weewx
 </pre>
 
 6.  Confirm that the html reports are being created.
-
 By default, the html reports are being written to /var/www/html/weewx.  These files should be updated every 5 minutes.
 
 ##Step 7:  Install a Web Server to access the WeeWX reports
