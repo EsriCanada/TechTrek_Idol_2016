@@ -172,4 +172,4 @@ By default, WeeWX generates HTML reports summarizing the current weather conditi
 sudo apt-get install nginx
 </pre>
 
-2.  Open a browser to http://my_raspberrypi_ip/weewx to test the site.
+2.  Open a browser to http://my_raspberrypi_ip_address/weewx to test the site.
