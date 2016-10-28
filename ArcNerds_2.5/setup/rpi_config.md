@@ -103,7 +103,7 @@ The following link contains complete instructions for downloading and installing
 http://www.weewx.com/docs/debian.htm
 
 1.  Determine the latest WeeWX debian package.  Currently (Oct 2016) the installs are located at
-<a href="http://weewx.com/downloads/>WeeWX: downloads</a> <br />
+<a href="http://weewx.com/downloads/">WeeWX: downloads</a> <br />
 The latest debian distribution as of October 2016 is weewx_3.6.1-1_all.deb.
 
 2.  Download the latest WeeWX package for Debian based systems.  At the prompt type:
