@@ -19,6 +19,6 @@ Technology Mix:
 
 ## **[Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
 
-**Download the app to help us report gum pollution:**
+Download the **GumShoe Map** app to help us report gum pollution:
 
 ![GumShoe Map](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/assets/img/srclayericon.png)  [![Alt text for your video](https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg-25178aeef6eb6b83b96f5f2d004eda3bffbb37122de64afbaef7107b384a4132.svg)](https://itunes.apple.com/us/app/gumshoe-map/id931582747?mt=8)
