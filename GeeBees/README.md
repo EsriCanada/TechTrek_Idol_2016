@@ -12,6 +12,6 @@ Technology Mix:
 * ArcGIS Online hosted web layers
 * Bootleaf front-end
 
-[![Alt text for your video](http://img.youtube.com/vi/ZmT4ARHPJ5c/0.jpg)](https://www.youtube.com/watch?v=ZmT4ARHPJ5c)
+[![Alt text for your video](http://img.youtube.com/vi/ZmT4ARHPJ5c/0.jpg)](https://youtu.be/8dVYK2yGOzI)
 
 ## **[Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
