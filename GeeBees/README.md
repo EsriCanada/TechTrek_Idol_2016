@@ -1,6 +1,7 @@
 # GumBuster
+## Predicting Gum Pollution in Toronto
 
-How it works:
+How the prediction engine works:
 
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
 
