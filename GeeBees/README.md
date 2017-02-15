@@ -1,6 +1,8 @@
 # GumBuster - 6ix Edition
 ## Predicting Gum Pollution in Toronto
 
+[Dark Side of the Chew](http://www.darksideofthechew.com/)
+
 How the data-driven prediction engine works:
 
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
