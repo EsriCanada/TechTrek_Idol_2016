@@ -19,4 +19,4 @@ Technology Mix:
 
 ## **[Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
 
-[Get the App](https://itunes.apple.com/us/app/gumshoe-map/id931582747?mt=8)
+## [Get the GumShoe Map App](https://itunes.apple.com/us/app/gumshoe-map/id931582747?mt=8)
