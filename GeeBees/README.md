@@ -1,4 +1,4 @@
-# GumBuster
+# GumBuster - the 6ix Ed.
 ## Predicting Gum Pollution in Toronto
 
 How the data-driven prediction engine works:
