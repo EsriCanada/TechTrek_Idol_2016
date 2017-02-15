@@ -1,4 +1,4 @@
-![GumShoe Map](https://github.com/EsriCanada/TechTrek_Idol_2016/blob/master/GeeBees/app/assets/img/Gumbuster3.png)##6ix Edition 
+![GumShoe Map](https://github.com/EsriCanada/TechTrek_Idol_2016/blob/master/GeeBees/app/assets/img/Gumbuster3.png)**6ix Edition**
 
 ## Predicting Gum Pollution in Toronto
 
