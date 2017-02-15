@@ -12,13 +12,11 @@
 
 ![GumShoe Map](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/assets/img/srclayericon.png)  [![Alt text for your video](https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-lrg-25178aeef6eb6b83b96f5f2d004eda3bffbb37122de64afbaef7107b384a4132.svg)](https://itunes.apple.com/us/app/gumshoe-map/id931582747?mt=8)
 
-Team Members:
-
+**Team Members:**
 * Matt English
 * Mike Leahy
 
-Technology Mix:
-
+**Technology Mix:**
 * Python backend
 * ArcGIS Online hosted web layers
 * Bootleaf front-end
