@@ -15,7 +15,7 @@ Technology Mix:
 * Bootleaf front-end
 
 
-
+![GumShoe Map](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/assets/img/srclayericon.png) 
 
 ## **[Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
 
