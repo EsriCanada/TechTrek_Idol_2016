@@ -1,0 +1,386 @@
+.leaflet-control-dashboard
+{
+    width: 350px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    background: rgba(50,50,50,0.8);
+    border-radius: 5px;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-duration: 0.25s;
+    -webkit-transition-timing-function: ease-in-out;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    z-index: 99989;
+}
+
+.leaflet-control-dashboard-active
+{
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-duration: 0.25s;
+    -webkit-transition-timing-function: ease-in-out;
+    width: 100%;
+    height: 70%;
+    margin: 0 !important;
+    padding: 0 !important;
+    bottom: 15% !important;
+}
+
+.leaflet-control-container, .leaflet-bottom.leaflet-left
+{
+    width: 100% !important;
+    height: 100% !important;
+    z-index:99988;
+}
+
+.leaflet-control-dashboard .intro
+{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+.leaflet-control-dashboard .intro td
+{
+    text-align: center;
+    vertical-align: middle;
+    padding:5px;
+}
+
+.leaflet-control-dashboard .summary
+{
+    width:100%;
+    height:270px;
+}
+
+.leaflet-control-dashboard .summary.nochart
+{
+    width:100%;
+    height:4.5em;
+}
+
+.leaflet-control-dashboard-active .summary.nochart
+{
+    top:50%;
+    position:relative;
+}
+
+.leaflet-control-dashboard .summary-chart
+{
+    height: 200px;
+    width: 100%;
+    top: 20px;
+    padding: 0 5px 0 5px;
+    position: absolute;
+}
+
+.leaflet-control-dashboard .summary-details
+{
+    height: 48px;
+    min-height:48px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align:center;
+}
+
+.leaflet-control-dashboard .summary .chart-title
+{
+    color: #fff;
+    width: 100%;
+    text-align:center;
+}
+
+.leaflet-control-dashboard-active .summary-chart
+{
+    height:80%;
+}
+
+.leaflet-control-dashboard-active .summary-details
+{
+    height: 10%;
+}
+
+.leaflet-control-dashboard .summary-details .detail-wrapper
+{
+    width: 100%;
+    height: 0;
+    top: 50%;
+    position: relative;
+    margin-top: -2em;
+}
+
+.leaflet-control-dashboard .summary-details .detail-wrapper div
+{
+    display:inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight:bold;
+}
+
+.leaflet-control-dashboard .summary-cell .long-label
+{   
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-duration: 0.25s;
+    -webkit-transition-timing-function: ease-in-out;
+}
+
+.leaflet-control-dashboard .long-label
+{
+    max-width:0%;
+}
+
+.leaflet-control-dashboard .short-label
+{
+    max-width:100%;
+}
+
+.leaflet-control-dashboard-active .short-label
+{
+    max-width:0%;
+}
+
+.leaflet-control-dashboard-active .long-label
+{
+    max-width:100%;
+}
+
+.leaflet-control-dashboard .summary-details .detail-wrapper div.cost
+{
+    color: #EF6121;
+}
+
+@media (max-width: 767px)
+{
+    .leaflet-control-dashboard .summary
+    {
+        width:100%;
+        height:4.5em;
+    }
+
+    .leaflet-control-dashboard .summary-chart
+    {
+        height: 0;
+    }
+    
+    .leaflet-control-dashboard-active .summary-chart
+    {
+        height: 90%;
+    }
+}
+
+@media (max-width: 400px)
+{
+    .leaflet-control-dashboard
+       {
+        width:300px;
+    }
+    
+    .leaflet-control-dashboard-active
+    {
+        width: 100%;
+    }
+}
+
+.summary-badge
+{
+    background-color: black;
+    height: 100px;
+    width: 100px;
+    border-radius:50px;
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    border: 3px #EF6121 solid;
+}
+
+.summary-badge-value
+{
+    width:94px;
+    height:90px;
+    line-height:90px;
+    /* font-family: Courier New,Courier,monospace; */
+    color: #EF6121;
+    font-weight: bold;
+    font-size: 35px;
+    position:absolute;
+    top:0;
+    left:0;
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+
+.summary-badge-label
+{
+    /* font-family: Courier New,Courier,monospace; */
+    color: #EF6121;
+    font-weight: bold;
+    font-size: 16px;
+    position:absolute;
+    bottom:14px;
+    left:0;
+    margin:0;
+    padding:0;
+    width:94px;
+    text-align: center;
+}
+
+.summary-badge-title
+{
+    position: relative;
+    padding:4px;
+    line-height: 20px;
+    bottom: 75px;
+    color: #FFF;
+    font-size: 18px;
+    /* font-family: Courier New,Courier,monospace; */
+    text-align: center;
+    white-space: nowrap;
+    font-weight: bold;
+    background-color: rgba(50,50,50,0.8);
+    border-radius: 5px;
+    width: 100px;
+    margin-left: -3px;
+    text-shadow: 0 0 2px black;
+}
+
+.summary-badge-title.hidden, .reported-chart .improve-this.hidden
+{
+    display:none;
+}
+
+.reported-chart
+{
+    width: 160px;
+    height: 140px;
+    position:fixed;
+    bottom:10px;
+    left:490px;
+}
+
+.reported-chart canvas
+{
+    position:absolute;
+    bottom:32px;
+    left:0;
+    margin:0;
+    padding:0;
+    width:160px;
+    height:75px;
+}
+
+.reported-chart .improve-this
+{
+    position: absolute;
+    bottom: 0;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 12px;
+    width: 160px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    color: #FFF;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: rgba(50,50,50,0.8);
+}
+
+.reported-chart .improve-this div
+{
+    display:inline-block;
+    padding-bottom:4px;
+}
+
+.reported-chart .description
+{
+    position: absolute;
+    line-height: 24px;
+    bottom: 115px;
+    color: white;
+    font-size: 12px;
+    /* font-family: Courier New,Courier,monospace; */
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
+    background-color: rgba(50,50,50,0.8);
+    border-radius: 5px;
+    width: 160px;
+    margin-left: -3px;
+    /* text-shadow: 0 0 2px black; */
+    padding: 3px;
+}
+
+.reported-chart .report-icon
+{
+    width:20px;
+    height:20px;
+    display:inline-block;
+    line-height:24px;
+    margin:0;
+    padding:0;
+    margin-right:6px;
+}
+
+@media (max-width: 500px)
+{
+    .summary-badge
+    {
+        bottom: 6em;
+    }
+}
+
+@media (max-width: 680px)
+{    
+    .reported-chart
+    {
+        display:none;
+    }
+}
+
+.leaflet-control-zoom  {
+    bottom: 24px !important;
+    position: fixed;
+    right: 0;
+}
+
+.esri-leaflet-logo
+{
+    bottom: 6px !important;
+    right: 10px;
+    position: fixed;
+}
+
+@media (max-width: 400px)
+{
+       .leaflet-control-dashboard-active .summary-details
+    {
+        font-size: 8px;
+    }
+
+    .leaflet-control-zoom  {
+        bottom: 84px !important;
+        position: fixed;
+        right: 0;
+    }
+    
+    .esri-leaflet-logo
+    {
+        bottom: 66px !important;
+        right: 10px;
+        position: fixed;
+    }
+}
+
+@media (min-width: 501px)
+{
+    .summary-badge
+    {
+        left: 370px;
+    }
+}
+
