@@ -2,7 +2,7 @@
 
 How it works:
 
-[![Alt text for your video](https://i.ytimg.com/vi/8dVYK2yGOzI/3.jpg)](https://youtu.be/8dVYK2yGOzI)
+[![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
 
 * Matt English
 * Mike Leahy
