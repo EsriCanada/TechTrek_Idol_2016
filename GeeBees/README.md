@@ -1,12 +1,12 @@
 # GumBuster - 6ix Edition
 ## Predicting Gum Pollution in Toronto
 
-**1.** Visit [Dark Side of the Chew](http://www.darksideofthechew.com/) to gain an understanding of the problem
+**1.** Visit [Dark Side of the Chew](http://www.darksideofthechew.com/) to gain an understanding of the problem.
 
-**1.** Watch this video to understand how the data-driven prediction engine works:
+**2.** Watch this video to understand how the data-driven prediction engine works:
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
 
-## **[Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
+## **3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)**
 
 Team Members:
 
