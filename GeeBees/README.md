@@ -6,7 +6,7 @@
 ![GumShoe Map](http://www.darksideofthechew.com/wp-content/uploads/2014/10/GumShoe-App-Pic_01-300x168.jpg)
 
 
-**2.** Watch this video to understand how the data-driven prediction engine works:
+**2.** Watch this video to understand how our Pythonic data-driven prediction engine works:
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
 
 ##3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)
