@@ -2,6 +2,8 @@
 ## 6ix Edition - Using Citizen Science to Quantify Gum Pollution in Toronto
 
 **1.** Visit [Dark Side of the Chew](http://www.darksideofthechew.com/) to gain an understanding of the problem.
+![GumShoe Map](http://67.212.91.121/~darkside/wp-content/uploads/2014/10/GumShoe-App-Pic_01.jpg)
+
 
 **2.** Watch this video to understand how the data-driven prediction engine works:
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
