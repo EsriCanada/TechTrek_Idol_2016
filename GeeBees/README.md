@@ -2,6 +2,7 @@
 ## 6ix Edition - Using Citizen Science to Quantify Gum Pollution in Toronto
 
 **1.** Visit [Dark Side of the Chew](http://www.darksideofthechew.com/) to gain an understanding of the problem.
+
 ![GumShoe Map](http://www.darksideofthechew.com/wp-content/uploads/2014/10/GumShoe-App-Pic_01-300x168.jpg)
 
 
