@@ -8,7 +8,8 @@
 
 ##3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)
 <!--**3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)** Click on the map to begin.-->
-* list
+* Click on the map to begin
+* Be sure to play with the Options menu
 
 **4.** Become a **Citizen Scientist** and download the **GumShoe Map** app to help us report gum pollution:
 
