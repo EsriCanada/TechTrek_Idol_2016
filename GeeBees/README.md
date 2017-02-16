@@ -1,5 +1,5 @@
 ![GumShoe Map](https://github.com/EsriCanada/TechTrek_Idol_2016/blob/master/GeeBees/app/assets/img/Gumbuster3.png)
-## 6ix Edition - *"Using Citizen Science to Quantify Gum Pollution in Toronto"*
+## 6ix Edition - "Using Citizen Science to Quantify Gum Pollution in Toronto"
 
 **1.** Visit [Dark Side of the Chew](http://www.darksideofthechew.com/) to gain an understanding of the problem.
 
