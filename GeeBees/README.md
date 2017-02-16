@@ -6,8 +6,8 @@
 **2.** Watch this video to understand how the data-driven prediction engine works:
 [![Alt text for your video](http://i3.ytimg.com/vi/8dVYK2yGOzI/hqdefault.jpg)](https://youtu.be/8dVYK2yGOzI)
 
-<!--##3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)-->
-**3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)** Click on the map to begin.
+-##3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)
+<!--**3. [GumBuster Live Demo](https://mgleahy.github.io/TechTrek_Idol_2016/GeeBees/app/)** Click on the map to begin.-->
 
 **4.** Become a **Citizen Scientist** and download the **GumShoe Map** app to help us report gum pollution:
 
