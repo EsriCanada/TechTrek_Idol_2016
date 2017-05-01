@@ -384,24 +384,41 @@ def main():
                     try:
                         cell = pv.GetCell(cIndex)
                         if not cell.is_open and not cell.is_degenerate:
-                            if (cIndex % 5000 == 0 and cIndex > 0):
+
+                            if cIndex % 5000 == 0 and cIndex > 0:
                                 arcpy.AddMessage("Cell Index: {0}".format(cIndex))
-                            pointArray = arcpy.Array()
-                            for vIndex in cell.vertices:
-                                vertex = pv.GetVertex(vIndex)
-                                pointArray.add(arcpy.Point(
-                                    vertex.X,
-                                    vertex.Y
-                                ))
-                            input_type = None
-                            input_id = None
-                            if cell.site >= len(pointOIDs):
-                                input_type = "LINE"
-                                input_id = lineIds[cell.site - len(pointOIDs)]
-                            else:
-                                input_type = "POINT"
-                                input_id = pointOIDs[cell.site]
-                            polygon = arcpy.Polygon(pointArray)
+
+                            cell_points_array = arcpy.Array()
+                            previous_vertex_index = -1
+                            for edge_index in cell.edges:
+                                e = pv.GetEdge(edge_index)
+                                startVertex = pv.GetVertex(e.start)
+                                endVertex = pv.GetVertex(e.end)
+                                max_distance = pyvoronoi.Distance([startVertex.X, startVertex.Y], [endVertex.X, endVertex.Y]) / 10
+
+                                points = []
+                                if e.is_linear:
+                                    points.append([startVertex.X, startVertex.Y])
+                                    points.append([endVertex.X, endVertex.Y])
+                                else:
+                                    try:
+                                        curved_points = pv.DiscretizeCurvedEdge(edge_index, max_distance, 1/ factor)
+                                        points.extend(curved_points)
+
+                                    except Exception as e:
+                                        arcpy.AddError("Exception happened at cell '{0}'".format(i))
+                                        points.append([startVertex.X, startVertex.Y])
+                                        points.append([endVertex.X, endVertex.Y])
+
+                                start_index = 1 if previous_vertex_index == e.start else 0
+                                for index in range(start_index, len(points)):
+                                    point = points[index]
+                                    cell_points_array.append(arcpy.Point(point[0], point[1]))
+
+                            input_type = 'LINE' if cell.site >= len(pointOIDs) else 'POINT'
+                            input_id = lineIds[cell.site - len(pointOIDs)] if cell.site >= len(pointOIDs) else pointOIDs[cell.site]
+
+                            polygon = arcpy.Polygon(cell_points_array)
                             cursor.insertRow((cell.cell_identifier, cell.contains_point, cell.contains_segment, polygon, cell.site,
                                               cell.source_category, input_type, input_id))
                     except Exception as e:
