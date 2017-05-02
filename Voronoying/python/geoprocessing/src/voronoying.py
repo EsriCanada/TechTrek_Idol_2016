@@ -119,6 +119,8 @@ def main():
         outsegments = arcpy.GetParameterAsText(4)
         outpolygons = arcpy.GetParameterAsText(5)
         inroads_identifier = arcpy.GetParameterAsText(6)
+        #TODO Implement curve ratio
+        curve_ratio = arcpy.GetParameterAsText(7)
         arcpy.env.workspace = out_workspace
 
         ##################################################################################
@@ -154,6 +156,10 @@ def main():
         extents.append(input_lines_bbox)
         # Validate input point feature class if required.
         input_points_bbox = validate_input_point_feature_class(inpoints) if len(arcpy.GetParameterAsText(0)) > 0 else None
+
+        if curve_ratio < 1:
+            raise Exception('Invalid curve ratio. It must be greater than 1. Current value: {}'.format(curve_ratio))
+        
 
         ##################################################################################
         # REMOVE FEATURE CLASSES
@@ -223,9 +229,14 @@ def main():
                     arcpy.Point(final_bounding_box_expended.XMax, final_bounding_box_expended.YMin)
                 ])
         ]
+
         arcpy.AddMessage(
-            "Bounding Box Info: {0},{1} | {2},{3}".format(final_bounding_box.XMin, final_bounding_box.YMin, final_bounding_box.XMax,
-                                                          final_bounding_box.YMax))
+            "Bounding Box Info: {0},{1} | {2},{3}".format(
+                final_bounding_box.XMin,
+                final_bounding_box.YMin,
+                final_bounding_box.XMax,
+                final_bounding_box.YMax)
+        )
 
 
         ##################################################################################
@@ -325,7 +336,7 @@ def main():
 
                                 else:
                                     try:
-                                        points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance, 1/ factor)
+                                        points = pv.DiscretizeCurvedEdge(cell.edges[i], max_distance, 1/ curve_ratio)
                                         for p in points:
                                             array.append(arcpy.Point(p[0], p[1]))
 
@@ -345,15 +356,20 @@ def main():
                                     except pyvoronoi.UnsolvableParabolaEquation:
                                         edge = pv.outputEdges[cell.edges[i]]
                                         sites = pv.ReturnCurvedSiteInformation(edge)
-                                        pointSite = sites[0]
-                                        segmentSite = sites[1]
-                                        edgestart_vertex = pv.outputVertices[edge.start]
-                                        edgeend_vertex = pv.outputVertices[edge.end]
+                                        point_site = sites[0]
+                                        segment_site = sites[1]
+                                        edge_start_vertex = pv.outputVertices[edge.start]
+                                        edge_end_vertex = pv.outputVertices[edge.end]
 
-                                        arcpy.AddWarning("Input Point: {0}".format(pointSite))
-                                        arcpy.AddWarning("Input Segment: {0}".format(segmentSite))
-                                        arcpy.AddWarning("Parabola Start: {0}".format([edgestart_vertex.X, edgestart_vertex.Y]))
-                                        arcpy.AddWarning("Parabola End: {0}".format([edgeend_vertex.X, edgeend_vertex.Y]))
+                                        arcpy.AddWarning("Input Point: {0}".format(point_site))
+                                        arcpy.AddWarning("Input Segment: {0}".format(segment_site))
+                                        arcpy.AddWarning("Parabola Start: {0}".format(
+                                            [edge_start_vertex.X, edge_start_vertex.Y])
+                                        )
+                                        arcpy.AddWarning("Parabola End: {0}".format(
+                                            [edge_end_vertex.X, edge_end_vertex.Y])
+                                        )
+
                                         arcpy.AddWarning("Distance: {0}".format(max_distance))
 
                                         arcpy.AddWarning(
@@ -412,7 +428,7 @@ def main():
                                     points.append([end_vertex.X, end_vertex.Y])
                                 else:
                                     try:
-                                        curved_points = pv.DiscretizeCurvedEdge(edge_index, max_distance, 1/ factor)
+                                        curved_points = pv.DiscretizeCurvedEdge(edge_index, max_distance, 1/ curve_ratio)
                                         points.extend(curved_points)
 
                                     except Exception as e:
