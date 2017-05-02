@@ -120,7 +120,7 @@ def main():
         outpolygons = arcpy.GetParameterAsText(5)
         inroads_identifier = arcpy.GetParameterAsText(6)
         #TODO Implement curve ratio
-        curve_ratio = arcpy.GetParameterAsText(7)
+        curve_ratio_txt = arcpy.GetParameterAsText(7)
         arcpy.env.workspace = out_workspace
 
         ##################################################################################
@@ -129,6 +129,7 @@ def main():
         if arcpy.env.scratchWorkspace is None:
             arcpy.env.scratchWorkspace = r'in_memory'
         factor = 100
+        default_curve_ratio = 10
         inroads_split_name = "voronoying_lines_split"
         inroads_split_line_name = "voronoying_lines_split_lines"
         inroads_split = os.path.join(arcpy.env.scratchWorkspace, inroads_split_name)
@@ -157,9 +158,13 @@ def main():
         # Validate input point feature class if required.
         input_points_bbox = validate_input_point_feature_class(inpoints) if len(arcpy.GetParameterAsText(0)) > 0 else None
 
+        curve_ratio = default_curve_ratio
+        if curve_ratio_txt is None and curve_ratio_txt == '' and curve_ratio_txt == '#':
+            curve_ratio = float(curve_ratio_txt)
+
         if curve_ratio < 1:
             raise Exception('Invalid curve ratio. It must be greater than 1. Current value: {}'.format(curve_ratio))
-        
+
 
         ##################################################################################
         # REMOVE FEATURE CLASSES
