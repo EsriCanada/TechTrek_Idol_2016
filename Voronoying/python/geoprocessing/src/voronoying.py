@@ -119,7 +119,6 @@ def main():
         outsegments = arcpy.GetParameterAsText(4)
         outpolygons = arcpy.GetParameterAsText(5)
         inroads_identifier = arcpy.GetParameterAsText(6)
-        #TODO Implement curve ratio
         curve_ratio_txt = arcpy.GetParameterAsText(7)
         arcpy.env.workspace = out_workspace
 
