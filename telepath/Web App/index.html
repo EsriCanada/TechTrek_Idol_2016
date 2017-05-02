@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="Creemore Springs Turas Mor Path">
+  <meta name="author" content="">
+  <link rel="icon" href="//www.esri.com/favicon.ico">
+  <title>telepath - recall</title>
+  <link rel="stylesheet" href="//js.arcgis.com/4.0/esri/css/main.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
+</head>
+<body class="calcite-maps map-position-absolute nav-position-top nav-space-all layout-inline-left">
+  <!-- Navbar -->
+  <nav class="navbar navbar-fixed-top calcite-text-light calcite-blue-75">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">
+          <span class="esri-icon esri-icon-map-pin"></span>
+        </a>
+        <div class="navbar-title">
+          <div class="navbar-main-title text-overflow" data-toggle="modal" data-target="#modalSplash">telepath recall</div>
+          <div class="navbar-sub-title text-overflow" data-toggle="modal" data-target="#modalSplash">loading path...</div>
+        </div>
+      </div>
+        <!-- Navbar collapse -->
+        <div id="mainNav" class="collapse navbar-collapse" aria-expanded="false">
+          <ul class="nav navbar-nav navbar-right">
+           <!-- Primary Nav - Map and Scene -->
+            <li class="active"><a id="mapNav" class="hidden-xs hidden-sm" href="#2dTab" aria-controls="2Dtab" aria-expanded="true" role="tab" data-toggle="tab" data-tooltip="tip" title="2D View" data-placement="bottom">2D</a></li>
+            <li><a id="sceneNav" class="hidden-xs hidden-sm" href="#3dTab" aria-controls="3Dtab" role="tab" data-tooltip="tip" data-toggle="tab" title="3D View" data-placement="bottom">3D</a></li>
+            <li><form id="searchNav" class="navbar-form navbar-search hidden-xs visible-sm visible-md visible-lg"><div id="searchNavDiv"></div></form></li>
+            <!-- Secondary Nav - options dropdown menu -->
+            <li class="dropdown" role="presentation">
+              <a class="dropdown-toggle hidden-xs" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="esri-icon esri-icon-menu" aria-hidden="true"></span></a>
+              <ul class="dropdown-menu">
+                <li><a class="visible-xs visible-sm hidden-md hidden-lg" href="#2dTab" aria-controls="2Dtab" role="tab" data-toggle="tab">2D</a></li>
+                <li><a class="visible-xs visible-sm hidden-md hidden-lg" href="#3dTab" aria-controls="3Dtab" role="tab" data-toggle="tab">3D</a></li>
+                <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> Path Info</a></li>
+                <li><a class="visible-xs" role="button" data-target="#panelSearch" aria-haspopup="true"><span class="glyphicon glyphicon-search"></span> Search</a></li>
+                <li><a role="button" data-target="#panelPlayer" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> Player</a></li>
+              </ul>
+            </li>
+          </ul><!--/.nav -->
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </nav><!--/.navbar -->
+  <!-- Map Container  -->
+  <div class="map-container">
+    <div id="tabContainer" class="tab-content">
+      <div id="2dTab" class="tab-pane fade in active" role="tabpanel">
+         <div id="mapViewDiv" class="map-position-absolute"></div>
+      </div>
+      <div id="3dTab" class="tab-pane fade" role="tabpanel">
+        <div id="sceneViewDiv" class="map-position-absolute"></div>
+      </div>
+    </div>
+    <div id="timelineDiv">
+      <div class="vTimeline"></div>
+    </div>
+  </div><!-- /.container -->
+  <!-- Modal Window -->
+  <div class="modal fade" id="modalSplash" tabindex="-1" role="dialog" aria-labelledby="splashlModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="splash-body">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="text-center">
+                  <h3>Creemore Springs Turas Mór Bike Ride</h3>
+                  <hr>
+                  <p>Turas Mór is a non-competitive cycling event on gravel and non-gravel roads through some of the most scenic cycling areas in Clearview Township, Simcoe County. The challenging, yet memorable ride will be highlighted with two rest spots. Enjoy the beauty of the area with fellow cycling enthusiasts and finish the day at the vintage festival, beer garden and delicious food offerings that will take place in the village of Creemore – what could be better?</p>
+                  <p>Use the play controls to explore the path in both 2D and 3D. Enjoy!</p>
+                  <br>
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <a role="button" class="btn btn-success btn-lg" href="#">Do something!</a>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Moment Modal -->
+  <div class="moment-modal moment-hidden">
+    <div class="panel">
+      <div class="panel-heading" role="tab">
+        <div class="panel-title">
+          <a class="panel-toggle"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>&nbsp;<span class="moment-title">Moment</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="moment-content"></div>
+    <button class="btn play play-modal" aria-label="Left Align">
+      Continue <span class="glyphicon glyphicon-play"></span>
+    </button>
+  </div>
+  <!-- Panel -->
+  <div class="panel-container">
+    <div id="panelAccordion" class="panel-group"  role="tablist" aria-multiselectable="true">
+      <!-- Info Panel -->
+      <div id="panelInfo" class="panel panel-about collapse in">
+        <div id="headingInfo" class="panel-heading" role="tab">
+          <div class="panel-title">
+            <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseInfo" data-parent="#panelAccordion" aria-expanded="true" aria-controls="collapseInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About</a>
+            <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelInfo"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
+          </div>
+        </div>
+        <div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo">
+          <div class="panel-body">
+            <p>
+              <b><span class="path-name">Turas Mór</span></b><br>
+              <span class="path-length">24.37 km</span><br>
+              <span class="path-time">1h22m</span><br><br>
+              <span class="path-desc">...</span>
+            </p>
+          </div>
+        </div>
+        <button class="wide-btn btn btn-xs play">
+          Get Started <span class="glyphicon glyphicon-play"></span>
+        </button>
+      </div>
+      <!-- Search Panel -->
+      <div id="panelSearch" class="panel collapse hidden-sm hidden-md hidden-lg">
+        <div id="headingSearch" class="panel-heading" role="tab">
+          <div class="panel-title">
+            <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseSearch" data-parent="#panelAccordion" aria-expanded="false" aria-controls="collapseSearch"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a>
+            <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelSearch"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
+          </div>
+        </div>
+        <div id="collapseSearch" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSearch">
+          <div class="panel-body panel-overflow-visible">
+            <div id="searchPanelDiv"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Player Panel -->
+   <!--    <div id="panelPlayer" class="panel collapse in">
+        <div id="headingPlayer" class="panel-heading" role="tab">
+          <div class="panel-title">
+            <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapsePlayer" aria-expanded="false" data-parent="#panelAccordion"  aria-controls="collapsePlayer"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span> Player</a>
+            <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelPlayer"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
+          </div>
+        </div>
+        <div id="collapsePlayer" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingPlayer">
+          <div class="panel-body">
+            <button class="btn btn-xs play">
+              <span class="glyphicon glyphicon-play"></span>
+            </button>
+            <button id="stop" class="btn btn-xs">
+              <span class="glyphicon glyphicon-refresh"></span>
+            </button>
+            <div class="distance-container">
+              <div class="distance-label">Distance:&nbsp;</div><div class="distance-value">0.0</div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div> <!-- /.panel-group -->
+  </div> <!-- /.panel-container -->
+  <div class="distance"></div>
+  <!-- <script src="assets/vendor/dojo/dojo.js"></script> -->
+  <script src="//js.arcgis.com/4.0/"></script>
+  <script src="assets/scripts/init.js"></script>
+</body>
+</html>
