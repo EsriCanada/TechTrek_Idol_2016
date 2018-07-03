@@ -1,6 +1,6 @@
 #WeeWx service to upload Weather Station data to ArcGIS Online
 
-This script periodically updates an <a href="http://services.arcgis.com/EgePHk52tsFjmhbJ/arcgis/rest/services/weather/FeatureServer/">ArcGIS Online feature service</a> maintaining data from a home-use weather station.  
+This script periodically updates an ArcGIS Online feature service maintaining data from a home-use weather station.  
 
 This script was built to run as a <a href="http://www.weewx.com/">WeeWX</a> service running on a Raspberry Pi.  WeeWx is python based software that extracts data from a weather station on a configured interval.  Custom python code can be written to perform additional tasks when WeeWX reads data from the Weather Station.
 
@@ -45,8 +45,6 @@ where:
 <b>client_secret:</b>  the registered credentials for token generation. <br/>
 <b>station_id:</b>  the registered station ID for the weather station. <br/>
 
-The following tutorial provides details on generating a client_id and client_secret:
-<a href="../sample_tutorials/README.md">Using python to upload data to ArcGIS Online</a>.
 
 Finally, you will need to configure WeeWx to load the service.  Add a reference for user.agolUpload.AgolUpload to the list of report_services in the [Engine][[Services]] section of the weewx.conf file:
 
