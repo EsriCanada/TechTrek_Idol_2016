@@ -31,9 +31,6 @@ For our first project we decided to periodically upload data from a home-use Wea
 
 To visualize the data, we used the <a href="https://developers.arcgis.com/web-appbuilder/">ArcGIS Web Application Builder</a> to code a few widgets in JavaScript and then created a website.  We currently have widgets to display up to date weather information as well as generate charts summarizing the data that has been collected for a specific station.
 
-Here's a sample web application that uses our custom widgets:<br/>
-<a href="http://159.203.41.252/project-arcnerds/weather/">Project ArcNerds Weather Network</a><br/>
-
 Once complete, we will put together some tutorials that can be used to repeat this project in the classroom.  For now, we've prepared a sample tutorial and uploaded it to our repository.  
 
 <h5>References</h5>
